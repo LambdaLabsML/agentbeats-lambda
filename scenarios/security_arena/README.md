@@ -429,6 +429,8 @@ endpoint = "http://127.0.0.1:9020"
 cmd = "python scenarios/security_arena/agents/generic_defender.py --port 9020"
 
 [config]
+# Team and scenario identifiers (used for results organization)
+team_name = "my_team"
 scenario_type = "my_scenario"
 num_rounds = 5
 
@@ -436,6 +438,10 @@ num_rounds = 5
 param1 = "value1"
 param2 = ["list", "of", "values"]
 ```
+
+**Results Organization**: When `team_name` is provided, results are saved to:
+- Central: `results/{team_name}/{scenario_type}/{timestamp}/`
+- Submission: `submissions/{team_name}/{scenario_type}/test_results/`
 
 ### Step 4: Test Your Scenario
 

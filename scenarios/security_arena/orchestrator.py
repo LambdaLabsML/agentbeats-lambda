@@ -200,7 +200,11 @@ class GenericArenaOrchestrator(GreenAgent):
             )
 
             # === Create Final Result ===
+            # Get team_name from config if provided
+            team_name = req.config.get("team_name")
+
             arena_result = ArenaResult(
+                team_name=team_name,
                 scenario_type=scenario_type,
                 winner=battle_result["winner"],
                 baseline_passed=True,
@@ -519,50 +523,86 @@ Perform your task now. Output in the specified format."""
         updater: TaskUpdater,
         filename_suffix: str = "result"
     ) -> None:
-        """Save arena results to disk"""
+        """Save arena results to disk
+
+        Saves to:
+        1. Central results directory: results/{team_name}/{scenario_type}/{timestamp}/
+        2. Submission test_results (if team_name provided): submissions/{team_name}/{scenario_type}/test_results/
+        """
         import json
 
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+        # Determine central results directory
         results_dir_env = os.getenv("AGENTBEATS_RESULTS_DIR")
         if results_dir_env:
             results_dir = Path(results_dir_env)
             result_filename = f"security_arena_{filename_suffix}.json"
         else:
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            results_dir = Path("results") / f"security_arena_{timestamp}"
+            # Create path: results/{team_name}/{scenario_type}/{timestamp}/
+            if arena_result.team_name:
+                results_dir = Path("results") / arena_result.team_name / arena_result.scenario_type / timestamp
+            else:
+                results_dir = Path("results") / f"security_arena_{timestamp}"
             results_dir.mkdir(parents=True, exist_ok=True)
             result_filename = f"{filename_suffix}.json"
 
         result_path = results_dir / result_filename
 
+        # Save full result
         with open(result_path, 'w') as f:
             f.write(arena_result.model_dump_json(indent=2))
 
         logger.info(f"Results saved to: {result_path}")
 
-        # Generate baseline_passed.json
-        baseline_path = results_dir / "baseline_passed.json"
+        # Generate evidence files with team_name
         baseline_data = {
             "passed": arena_result.baseline_passed,
             "baseline_value": arena_result.baseline_value,
+            "team_name": arena_result.team_name,
             "scenario_type": arena_result.scenario_type
         }
-        with open(baseline_path, 'w') as f:
-            json.dump(baseline_data, f, indent=2)
 
-        # Generate attack_succeeded.json
-        attack_path = results_dir / "attack_succeeded.json"
         attack_succeeded = arena_result.winner == "attacker"
         attack_data = {
             "succeeded": attack_succeeded,
             "manipulation_round": arena_result.manipulation_round,
             "rounds_defended": arena_result.rounds_defended,
             "total_rounds": arena_result.total_rounds,
+            "team_name": arena_result.team_name,
             "scenario_type": arena_result.scenario_type
         }
+
+        # Save to central results directory
+        baseline_path = results_dir / "baseline_passed.json"
+        with open(baseline_path, 'w') as f:
+            json.dump(baseline_data, f, indent=2)
+
+        attack_path = results_dir / "attack_succeeded.json"
         with open(attack_path, 'w') as f:
             json.dump(attack_data, f, indent=2)
 
         logger.info(f"Evidence files saved to: {results_dir}")
+
+        # Also save evidence to submission's test_results folder (if team_name provided)
+        if arena_result.team_name:
+            submission_test_results = (
+                Path("scenarios/security_arena/submissions")
+                / arena_result.team_name
+                / arena_result.scenario_type
+                / "test_results"
+            )
+            if submission_test_results.exists() or submission_test_results.parent.exists():
+                submission_test_results.mkdir(parents=True, exist_ok=True)
+
+                # Save evidence copies to submission folder
+                with open(submission_test_results / "baseline_passed.json", 'w') as f:
+                    json.dump(baseline_data, f, indent=2)
+
+                with open(submission_test_results / "attack_succeeded.json", 'w') as f:
+                    json.dump(attack_data, f, indent=2)
+
+                logger.info(f"Evidence also saved to: {submission_test_results}")
 
         await updater.update_status(
             TaskState.working,

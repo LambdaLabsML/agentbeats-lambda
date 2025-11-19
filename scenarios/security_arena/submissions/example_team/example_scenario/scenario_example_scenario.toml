@@ -16,6 +16,8 @@ endpoint = "http://127.0.0.1:9020"
 cmd = "python scenarios/security_arena/agents/generic_defender.py --port 9020"
 
 [config]
+# Team and scenario identifiers for results organization
+team_name = "example_team"
 scenario_type = "example_scenario"
 num_rounds = 5
 

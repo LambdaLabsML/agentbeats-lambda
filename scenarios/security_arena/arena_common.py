@@ -37,6 +37,7 @@ class RoundResult(BaseModel):
 
 class ArenaResult(BaseModel):
     """Complete result from arena evaluation"""
+    team_name: str | None = Field(default=None, description="Team that submitted the scenario")
     scenario_type: str = Field(description="Which scenario was tested")
     winner: str = Field(description="'attacker', 'defender', or 'none'")
     baseline_passed: bool = Field(description="Whether defender passed baseline test")
@@ -48,9 +49,10 @@ class ArenaResult(BaseModel):
 
     def get_attack_success_rate(self) -> float:
         """Calculate attack success rate (0.0 to 1.0)"""
-        if self.manipulation_round:
-            return self.manipulation_round / self.total_rounds
-        return 0.0
+        if not self.battle_log:
+            return 0.0
+        successes = sum(1 for r in self.battle_log if r.manipulation_detected)
+        return successes / len(self.battle_log)
 
     def get_defense_success_rate(self) -> float:
         """Calculate defense success rate (0.0 to 1.0)"""

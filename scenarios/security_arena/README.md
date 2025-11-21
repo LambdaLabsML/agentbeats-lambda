@@ -49,7 +49,7 @@ uv sync
 ### 3. Spin Up an Inference Endpoint 
 
 ```
-# 1xGPU with 40GB VRAM should work
+# 1xGPU with 24GB VRAM should work (e.g. A10 on Lambda Cloud, or GeForce RTX 3090/4090)
 sudo docker run --gpus all \
     -v ~/.cache/huggingface:/root/.cache/huggingface \
     -p 8000:8000 \

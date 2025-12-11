@@ -13,12 +13,18 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 
+# Local testing only - participants add their imports here to test locally
+# For final submission, just submit your folder - Lambda handles integration
+from submissions.lambda_example.glitchinthematrix.plugin import GlitchInTheMatrixPlugin
+
 
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
+    # Local testing only - add your scenario here to test locally
+    "glitchinthematrix": GlitchInTheMatrixPlugin,
 }
 
 

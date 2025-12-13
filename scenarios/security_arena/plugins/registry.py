@@ -26,6 +26,31 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
 }
 
 
+# @contribution: kyuhee (Safe-AI-Lausanne)
+# Dynamically register submission plugins
+def _register_submission_plugins():
+    """Dynamically import and register submission plugins."""
+    import sys
+    from pathlib import Path
+
+    # Add project root to path
+    project_root = Path(__file__).parent.parent.parent.parent
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+    # Import kyuhee's plugins
+    try:
+        from submissions.kyuhee.grading_grift.plugin import GradingGriftPlugin
+        SCENARIO_PLUGINS["grading_grift"] = GradingGriftPlugin
+    except ImportError as e:
+        print(f"Warning: Could not load grading_grift plugin: {e}")
+# @end-contribution
+
+
+# Register submission plugins on module load
+_register_submission_plugins()
+
+
 def load_scenario(scenario_type: str, config: dict[str, Any]) -> ScenarioPlugin:
     """
     Load a scenario plugin by type name.

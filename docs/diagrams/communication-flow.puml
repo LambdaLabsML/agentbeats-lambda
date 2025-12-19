@@ -1,0 +1,91 @@
+@startuml communication-flow
+skinparam backgroundColor #FEFEFE
+skinparam component {
+    BackgroundColor<<client>> #E3F2FD
+    BackgroundColor<<orchestrator>> #C8E6C9
+    BackgroundColor<<attacker>> #FFCDD2
+    BackgroundColor<<defender>> #FFF9C4
+    BorderColor #333333
+}
+
+title AgentBeats - Communication Flow & Data Model
+
+package "Client Process" <<client>> {
+    component [client_cli.py] as client
+    component [A2A Client] as a2a_client
+
+    client --> a2a_client
+}
+
+package "Orchestrator Process" <<orchestrator>> {
+    component [GreenExecutor] as green_exec
+    component [GenericArenaOrchestrator] as orch
+    component [ToolProvider] as tool_prov
+    component [TaskUpdater] as updater
+
+    green_exec --> orch
+    orch --> tool_prov
+    green_exec --> updater
+}
+
+package "Attacker Process" <<attacker>> {
+    component [GenericAttackerExecutor] as att_exec
+    component [conversation_history] as att_history
+
+    att_exec --> att_history : maintains
+}
+
+package "Defender Process" <<defender>> {
+    component [GenericDefenderExecutor] as def_exec
+    component [conversation_history\n(unused in Phase 1)] as def_history
+
+    def_exec --> def_history : maintains\n(but orchestrator sends\nnew_conversation=True)
+}
+
+client -down-> green_exec : **1. EvalRequest** (HTTP POST)\n\n{\n  participants: {\n    attacker: "http://127.0.0.1:9021",\n    defender: "http://127.0.0.1:9020"\n  },\n  config: {\n    scenario_type: "thingularity",\n    num_rounds: 20,\n    hidden_tools: [...],\n    public_tools: [...]\n  }\n}
+
+updater -up-> client : **2. Status Updates** (Streaming)\n\nTaskStatusUpdateEvent:\n- State: working/completed/failed\n- Message: Progress text\n- Artifacts: Results JSON
+
+tool_prov -right-> att_exec : **3. Attack Message** (HTTP POST)\n\nMessage:\n- Role: user\n- Text: Attack objective +\n  domain context +\n  history + feedback\n- context_id: preserved\n  (new_conversation=False)
+
+att_exec -left-> tool_prov : **4. Attack Response**\n\nMessage:\n- Role: assistant\n- Text: Generated attack\n- context_id: same
+
+tool_prov -right-> def_exec : **5. Defense Message** (HTTP POST)\n\nMessage:\n- Role: user\n- Text: Defender role +\n  security guidelines +\n  attacker's output\n- context_id: None\n  (new_conversation=True)
+
+def_exec -left-> tool_prov : **6. Defense Response**\n\nMessage:\n- Role: assistant\n- Text: Defender output\n- context_id: new
+
+note right of tool_prov
+    **ToolProvider manages context:**
+
+    _context_ids = {
+        "http://127.0.0.1:9021": "abc123",  # Attacker
+        "http://127.0.0.1:9020": None       # Defender (reset each round)
+    }
+
+    new_conversation=False → Preserve context (stateful)
+    new_conversation=True → Fresh context (stateless)
+end note
+
+note bottom of client
+    **A2A Protocol Messages:**
+
+    1. AgentCard - Agent metadata (GET /)
+    2. Message - User/assistant messages
+    3. Task - Work unit with status
+    4. TaskStatusUpdateEvent - Progress updates
+    5. TaskArtifactUpdateEvent - Results
+end note
+
+legend right
+    **Process Isolation:**
+    Each component runs in separate process
+    Communication only via HTTP (A2A protocol)
+    No shared memory or direct function calls
+
+    **Async Architecture:**
+    Single-threaded asyncio event loop per process
+    Concurrent I/O without multi-threading
+    OpenAI calls use AsyncOpenAI client
+endlegend
+
+@enduml

@@ -13,12 +13,26 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 
+# Import submission scenarios
+from scenarios.security_arena.submissions.logmesh.burnerbug.plugin import BurnerBugPlugin
+from scenarios.security_arena.submissions.logmesh.copyrightcat.plugin import CopyrightCatPlugin
+from scenarios.security_arena.submissions.logmesh.debugdump.plugin import DebugDumpPlugin
+from scenarios.security_arena.submissions.logmesh.dockerdoo.plugin import DockerDooPlugin
+from scenarios.security_arena.submissions.logmesh.memorylane.plugin import MemoryLanePlugin
+from scenarios.security_arena.submissions.logmesh.solarspike.plugin import SolarSpikePlugin
+
 
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
+    "burnerbug": BurnerBugPlugin,  # BurnerBug - Waste Incinerator Control System
+    "copyrightcat": CopyrightCatPlugin,  # CopyrightCat - Creative Writing Bot Jailbreak
+    "debugdump": DebugDumpPlugin,  # DebugDump - Developer Support Bot
+    "dockerdoo": DockerDooPlugin,  # DockerDoo - DevOps Container Assistant
+    "memorylane": MemoryLanePlugin,  # MemoryLane - Personal Banking Assistant
+    "solarspike": SolarSpikePlugin,  # SolarSpike - Solar Farm Inverter Controller
 }
 
 

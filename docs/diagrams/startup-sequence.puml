@@ -1,0 +1,85 @@
+@startuml startup-sequence
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+title AgentBeats - Startup Sequence
+
+actor User
+participant "run_scenario.py\n(Main Process)" as Main
+participant "Orchestrator\nProcess" as Orch
+participant "Attacker\nProcess" as Att
+participant "Defender\nProcess" as Def
+participant "Client\nProcess" as Client
+
+User -> Main: uv run agentbeats-run\nscenario_thingularity.toml
+
+activate Main
+
+group Parse Configuration
+    Main -> Main: parse_toml(scenario)
+    note right
+        Extract:
+        - green_agent endpoint & cmd
+        - participants endpoints & cmds
+        - config (scenario_type, num_rounds, etc.)
+    end note
+end
+
+group Spawn Agent Processes
+    Main -> Att: subprocess.Popen(\n"python generic_attacker.py\n--host 127.0.0.1 --port 9021")
+    activate Att
+    Att -> Att: Start uvicorn server
+    Att -> Att: Create GenericAttackerExecutor
+    Att -> Att: Initialize OpenAI client
+    note right of Att: Port 9021\nHTTP Server Ready
+
+    Main -> Def: subprocess.Popen(\n"python generic_defender.py\n--host 127.0.0.1 --port 9020")
+    activate Def
+    Def -> Def: Start uvicorn server
+    Def -> Def: Create GenericDefenderExecutor
+    Def -> Def: Initialize OpenAI client
+    note right of Def: Port 9020\nHTTP Server Ready
+
+    Main -> Orch: subprocess.Popen(\n"python orchestrator.py\n--host 127.0.0.1 --port 9010")
+    activate Orch
+    Orch -> Orch: Start uvicorn server
+    Orch -> Orch: Create GreenExecutor +\nGenericArenaOrchestrator
+    note right of Orch: Port 9010\nHTTP Server Ready
+end
+
+group Health Check (wait_for_agents)
+    Main -> Orch: GET / (fetch agent card)
+    Orch --> Main: AgentCard JSON
+
+    Main -> Att: GET / (fetch agent card)
+    Att --> Main: AgentCard JSON
+
+    Main -> Def: GET / (fetch agent card)
+    Def --> Main: AgentCard JSON
+
+    note over Main
+        Poll every 1s
+        30s timeout
+        All agents healthy ✓
+    end note
+end
+
+group Launch Client
+    Main -> Client: subprocess.Popen(\n"python -m agentbeats.client_cli")
+    activate Client
+    Client -> Client: Parse TOML config
+    Client -> Client: Create EvalRequest JSON
+    note right of Client: Ready to send\nevaluation request
+end
+
+Main --> User: "Agents started.\nPress Ctrl+C to stop."
+
+note over User, Client
+    System ready for evaluation
+    All processes running independently
+    Communication via A2A protocol over HTTP
+end note
+
+@enduml

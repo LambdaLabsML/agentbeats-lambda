@@ -1,0 +1,283 @@
+@startuml run-eval-call-chain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+
+title Complete Call Chain: Command Line → run_eval()
+
+actor User
+participant "run_scenario.py\n(Main Process)" as Main
+participant "orchestrator.py\n(Process on :9010)" as Orch
+participant "client_cli.py\n(Client Process)" as Client
+participant "A2A Client\n(HTTP)" as A2AClient
+participant "uvicorn\n(HTTP Server)" as Uvicorn
+participant "DefaultRequestHandler\n(A2A SDK)" as Handler
+participant "GreenExecutor" as Executor
+participant "GenericArenaOrchestrator" as Arena
+
+== Step 1: User Runs Command ==
+
+User -> Main: **uv run agentbeats-run**\nscenarios/security_arena/scenario_thingularity.toml
+activate Main
+
+note right of Main
+    Entry point defined in pyproject.toml:
+    [project.scripts]
+    agentbeats-run = "agentbeats.run_scenario:main"
+end note
+
+Main -> Main: **main()**\n(run_scenario.py:98)
+
+Main -> Main: **parse_toml**(scenario_path)\n(run_scenario.py:60-95)
+
+note right of Main
+    Extracts from TOML:
+    • green_agent: endpoint + cmd
+    • participants: attacker, defender
+    • config: scenario settings
+end note
+
+== Step 2: Spawn Orchestrator Process ==
+
+Main -> Orch: **subprocess.Popen**(\n"python orchestrator.py\n--host 127.0.0.1 --port 9010")
+activate Orch
+
+note right of Orch
+    Separate Python process
+    Runs its own event loop
+end note
+
+Orch -> Orch: **main()**\n(orchestrator.py:695)
+
+Orch -> Orch: **create_app**(host, port)\n(orchestrator.py:665)
+
+note right of Orch
+    Setup components:
+    1. Create GenericArenaOrchestrator
+    2. Wrap in GreenExecutor
+    3. Create DefaultRequestHandler
+    4. Create A2AStarletteApplication
+end note
+
+Orch -> Arena: **GenericArenaOrchestrator()**
+activate Arena
+Arena --> Orch: orchestrator instance
+deactivate Arena
+
+Orch -> Executor: **GreenExecutor**(orchestrator)\n(green_executor.py:36)
+activate Executor
+
+note right of Executor
+    Wraps the orchestrator
+    Implements AgentExecutor interface
+end note
+
+Executor --> Orch: executor instance
+deactivate Executor
+
+Orch -> Handler: **DefaultRequestHandler**(\n  agent_executor=executor,\n  task_store=InMemoryTaskStore())
+activate Handler
+Handler --> Orch: request_handler
+deactivate Handler
+
+Orch -> Uvicorn: **uvicorn.run**(\n  app.build(),\n  host="127.0.0.1",\n  port=9010)
+activate Uvicorn
+
+note right of Uvicorn
+    HTTP server listening on :9010
+    Routes POST /messages to handler
+end note
+
+== Step 3: Wait for Agents Ready ==
+
+Main -> Main: **wait_for_agents**(cfg)\n(run_scenario.py:15-57)
+
+loop For each agent endpoint
+    Main -> Orch: **GET /** (fetch agent card)
+    Orch --> Main: AgentCard JSON
+end
+
+note right of Main
+    Polls every 1s, 30s timeout
+    Waits for all agents healthy
+end note
+
+== Step 4: Spawn Client Process ==
+
+Main -> Client: **subprocess.Popen**(\n"python -m agentbeats.client_cli\nscenario_thingularity.toml")
+activate Client
+
+Client -> Client: **main()**\n(client_cli.py:92)
+
+Client -> Client: **parse_toml**(toml_data)\n(client_cli.py:23-43)
+
+note right of Client
+    Creates EvalRequest:
+    {
+      "participants": {
+        "attacker": "http://127.0.0.1:9021",
+        "defender": "http://127.0.0.1:9020"
+      },
+      "config": {
+        "scenario_type": "thingularity",
+        "num_rounds": 20,
+        ...
+      }
+    }
+end note
+
+Client -> Client: **req.model_dump_json()**
+
+note right of Client
+    Serializes EvalRequest to JSON string
+end note
+
+== Step 5: Client Sends HTTP Request ==
+
+Client -> A2AClient: **send_message**(\n  message=eval_request_json,\n  base_url="http://127.0.0.1:9010",\n  streaming=True)\n(client.py:42)
+activate A2AClient
+
+A2AClient -> A2AClient: **GET /** (fetch agent card)
+
+A2AClient -> Uvicorn: **POST /messages**\n\nHeaders:\n  Content-Type: application/json\n\nBody:\n  {\n    "kind": "message",\n    "role": "user",\n    "parts": [{\n      "kind": "text",\n      "text": "{...EvalRequest JSON...}"\n    }],\n    "message_id": "...",\n    "context_id": null\n  }
+
+note right of A2AClient
+    A2A Protocol Message Format
+    EvalRequest JSON is wrapped in TextPart
+end note
+
+== Step 6: Server Receives Request ==
+
+Uvicorn -> Handler: **handle_message_request**(request)\n(A2A SDK internal)
+activate Handler
+
+Handler -> Handler: Parse A2A Message\nExtract TextPart
+
+Handler -> Executor: **execute**(\n  context=RequestContext,\n  event_queue=EventQueue)\n(green_executor.py:39)
+activate Executor
+
+note right of Executor
+    This is the GreenExecutor.execute() method
+    The key bridge between A2A protocol
+    and custom evaluation logic
+end note
+
+== Step 7: GreenExecutor Processes Request ==
+
+Executor -> Executor: **context.get_user_input()**\nExtracts EvalRequest JSON from TextPart
+
+Executor -> Executor: **EvalRequest.model_validate_json**(request_text)\n(green_executor.py:46)
+
+note right of Executor
+    Deserialize JSON → EvalRequest object
+    {
+      participants: {...},
+      config: {...}
+    }
+end note
+
+Executor -> Arena: **validate_request**(req)\n(green_executor.py:47)
+activate Arena
+Arena --> Executor: (True, "ok")
+deactivate Arena
+
+Executor -> Executor: **new_task**(message)\nCreate Task object\n(green_executor.py:55)
+
+Executor -> Executor: **TaskUpdater**(event_queue, task.id)\n(green_executor.py:60)
+
+note right of Executor
+    TaskUpdater sends status updates
+    back to client via event queue
+end note
+
+Executor -> Executor: **updater.update_status**(\n  TaskState.working,\n  "Starting assessment..."\n)\n(green_executor.py:61-64)
+
+== Step 8: Execute Orchestrator ==
+
+Executor -> Arena: **run_eval**(req, updater)\n(green_executor.py:67)
+activate Arena
+
+note right of Arena
+    🎯 THIS IS IT!
+    run_eval() is finally called!
+
+    File: orchestrator.py:81
+
+    async def run_eval(
+        self,
+        req: EvalRequest,
+        updater: TaskUpdater
+    ) -> None:
+        ...
+end note
+
+Arena -> Arena: Load scenario plugin
+Arena -> Arena: Run baseline test
+Arena -> Arena: Run adversarial battle
+Arena -> Arena: Save results
+
+Arena --> Executor: (returns when complete)
+deactivate Arena
+
+Executor -> Executor: **updater.complete()**\n(green_executor.py:68)
+
+Executor --> Handler: (returns)
+deactivate Executor
+
+== Step 9: Response Flow Back ==
+
+Handler -> Handler: Build response\n(Task with status + artifacts)
+
+Handler --> Uvicorn: HTTP Response\n{\n  task: {...},\n  status: "completed",\n  artifacts: [...]\n}
+deactivate Handler
+
+Uvicorn --> A2AClient: HTTP 200 OK\nSSE events (streaming)
+
+A2AClient -> Client: **event_consumer**(event)\n(client_cli.py:69)
+
+note right of Client
+    Receives streaming updates:
+    • Status: working
+    • Status: Round 1...
+    • Status: Round 2...
+    • Status: completed
+    • Artifact: Results
+end note
+
+Client -> Client: **print_parts**(event.parts)
+
+deactivate A2AClient
+
+Client --> User: Display results on stdout
+
+deactivate Client
+deactivate Orch
+deactivate Uvicorn
+deactivate Main
+
+== Summary ==
+
+note over User, Arena
+    **Complete Call Chain:**
+
+    1. User runs: uv run agentbeats-run scenario.toml
+    2. run_scenario.py:main() starts
+    3. Spawns orchestrator.py process
+    4. orchestrator.py:main() starts uvicorn server
+    5. Spawns client_cli.py process
+    6. client_cli.py:main() sends HTTP POST
+    7. uvicorn routes to DefaultRequestHandler
+    8. DefaultRequestHandler calls GreenExecutor.execute()
+    9. GreenExecutor.execute() calls arena.run_eval()
+    10. ✅ run_eval() runs the evaluation!
+
+    **Key Bridges:**
+    • subprocess.Popen: Process boundary
+    • HTTP POST: Network boundary
+    • DefaultRequestHandler: A2A → Executor
+    • GreenExecutor: A2A protocol → Custom logic
+    • run_eval(): Custom orchestration logic
+end note
+
+@enduml

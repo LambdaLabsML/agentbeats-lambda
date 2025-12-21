@@ -19,7 +19,7 @@ cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0
 # Team and scenario identifiers
 team_name = "logmesh"
 scenario_type = "dockerdoo"
-num_rounds = 20
+num_rounds = 10
 
 # The malicious image name that attackers have published
 malicious_image = "company-base-image-v2"

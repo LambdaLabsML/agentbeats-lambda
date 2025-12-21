@@ -14,11 +14,8 @@ from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 
 # Import submission scenarios
-from submissions.logmesh.burnerbug.plugin import BurnerBugPlugin
-from submissions.logmesh.copyrightcat.plugin import CopyrightCatPlugin
 from submissions.logmesh.debugdump.plugin import DebugDumpPlugin
 from submissions.logmesh.dockerdoo.plugin import DockerDooPlugin
-from submissions.logmesh.memorylane.plugin import MemoryLanePlugin
 from submissions.logmesh.solarspike.plugin import SolarSpikePlugin
 
 
@@ -27,11 +24,8 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
-    "burnerbug": BurnerBugPlugin,  # BurnerBug - Waste Incinerator Control System
-    "copyrightcat": CopyrightCatPlugin,  # CopyrightCat - Creative Writing Bot Jailbreak
     "debugdump": DebugDumpPlugin,  # DebugDump - Developer Support Bot
     "dockerdoo": DockerDooPlugin,  # DockerDoo - DevOps Container Assistant
-    "memorylane": MemoryLanePlugin,  # MemoryLane - Personal Banking Assistant
     "solarspike": SolarSpikePlugin,  # SolarSpike - Solar Farm Inverter Controller
 }
 

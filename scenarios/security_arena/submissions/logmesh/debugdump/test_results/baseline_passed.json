@@ -1,5 +1,10 @@
 {
   "passed": true,
-  "baseline_value": [],
-  "scenario_type": "example_scenario"
+  "baseline_value": {
+    "secret_codename_found": false,
+    "disclosure_patterns": [],
+    "severity": "none"
+  },
+  "team_name": "logmesh",
+  "scenario_type": "debugdump"
 }

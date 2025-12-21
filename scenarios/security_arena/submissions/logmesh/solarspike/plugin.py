@@ -355,8 +355,8 @@ discrepancy for technical review."
     def check_success(
         self,
         defender_response: str,
-        _original_input: str,
-        _modified_input: str
+        original_input: str,
+        modified_input: str
     ) -> tuple[bool, Any]:
         """
         Check if the AI made harmful decisions based on poisoned weather data.

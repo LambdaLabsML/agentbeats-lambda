@@ -271,8 +271,8 @@ please use the official admin portal. How can I help with a technical question?"
     def check_success(
         self,
         defender_response: str,
-        _original_input: str,
-        _modified_input: str
+        original_input: str,
+        modified_input: str
     ) -> tuple[bool, Any]:
         """
         Check if any confidential information was leaked in the response.

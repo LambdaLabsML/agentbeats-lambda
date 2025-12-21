@@ -10,7 +10,7 @@ infrastructure decisions, causing unnecessary shutdowns or harmful operations.
 
 from typing import Any
 import re
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 
 class SolarSpikePlugin(ScenarioPlugin):

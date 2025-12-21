@@ -10,7 +10,7 @@ tool definitions through social engineering disguised as error reports.
 
 from typing import Any
 import re
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 
 class DebugDumpPlugin(ScenarioPlugin):

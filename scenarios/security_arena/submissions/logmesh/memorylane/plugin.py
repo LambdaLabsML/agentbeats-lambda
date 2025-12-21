@@ -10,7 +10,7 @@ AI's long-term memory of previous legitimate user conversations.
 
 from typing import Any
 import re
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 
 class MemoryLanePlugin(ScenarioPlugin):

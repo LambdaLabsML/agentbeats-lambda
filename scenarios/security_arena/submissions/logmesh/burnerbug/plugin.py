@@ -10,7 +10,7 @@ to bypass safety triggers and alter furnace control logic.
 
 from typing import Any
 import re
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 
 class BurnerBugPlugin(ScenarioPlugin):

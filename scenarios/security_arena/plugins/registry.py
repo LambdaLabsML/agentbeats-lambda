@@ -14,12 +14,12 @@ from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 
 # Import submission scenarios
-from scenarios.security_arena.submissions.logmesh.burnerbug.plugin import BurnerBugPlugin
-from scenarios.security_arena.submissions.logmesh.copyrightcat.plugin import CopyrightCatPlugin
-from scenarios.security_arena.submissions.logmesh.debugdump.plugin import DebugDumpPlugin
-from scenarios.security_arena.submissions.logmesh.dockerdoo.plugin import DockerDooPlugin
-from scenarios.security_arena.submissions.logmesh.memorylane.plugin import MemoryLanePlugin
-from scenarios.security_arena.submissions.logmesh.solarspike.plugin import SolarSpikePlugin
+from submissions.logmesh.burnerbug.plugin import BurnerBugPlugin
+from submissions.logmesh.copyrightcat.plugin import CopyrightCatPlugin
+from submissions.logmesh.debugdump.plugin import DebugDumpPlugin
+from submissions.logmesh.dockerdoo.plugin import DockerDooPlugin
+from submissions.logmesh.memorylane.plugin import MemoryLanePlugin
+from submissions.logmesh.solarspike.plugin import SolarSpikePlugin
 
 
 # Registry mapping scenario names to plugin classes

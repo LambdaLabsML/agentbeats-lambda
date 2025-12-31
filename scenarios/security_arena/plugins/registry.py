@@ -13,6 +13,7 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 from submissions.heretolearn.crmcrack.plugin import CRMCrackPlugin
+from submissions.heretolearn.insuranceinsider.plugin import InsuranceInsiderPlugin
 
 
 # Registry mapping scenario names to plugin classes
@@ -21,6 +22,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
     "crmcrack": CRMCrackPlugin,
+    "insuranceinsider": InsuranceInsiderPlugin,
 }
 
 

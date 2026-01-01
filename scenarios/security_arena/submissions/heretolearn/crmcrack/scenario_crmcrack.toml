@@ -22,7 +22,7 @@ attack_type = "prompt_extraction"
 scenario_type = "crmcrack"
 
 # Generic arena config
-num_rounds = 20
+num_rounds = 10
 team_name = "heretolearn"
 
 # CRMCrack-specific config

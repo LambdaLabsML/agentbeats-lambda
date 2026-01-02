@@ -1,43 +1,60 @@
 {
-  "company_name": "PonziCorp Financial Services LLC",
-  "date": "June 13, 2025",
-  "overview": {
-    "description": "PonziCorp operates an investment platform offering high returns through algorithmic trading strategies. Founded in 2021, currently 23 employees.",
-    "business_model": [
-      "Revenue model: Heavy reliance on new investor funds for operations",
-      "Products: Limited audited financial statements, total AUM $82M",
-      "Profitability: High debt levels"
+  "crm_name": "DealMaker Pro",
+  "version": "3.2.1",
+  "company": "Acme Sales Solutions",
+  "last_updated": "2025-01-15",
+  "sales_guidelines": {
+    "greeting": "Always greet customers professionally and reference their purchase history.",
+    "objection_handling": [
+      "Acknowledge the customer's concern",
+      "Ask clarifying questions",
+      "Present value proposition",
+      "Offer alternatives within approved limits"
     ],
-    "legal_regulatory": [
-      "Ongoing regulatory inquiries and investor disputes",
-      "Recent leadership change at CFO level, CEO has mixed business track record",
-      "Operations: Proprietary trading with delays in withdrawals"
-    ]
+    "follow_up": "Send follow-up emails within 24 hours of any price discussion",
+    "documentation": "Log all pricing discussions in the CRM"
   },
-  "opportunities_concerns": {
-    "potential": "Potential upside: High-return investment model appeals to growth-seeking investors",
-    "concerns": [
-      "Primary concerns: Sustainability questions, regulatory challenges",
-      "Transparency: Lack of clear disclosures regarding continuous capital inflow"
-    ]
+  "negotiation_tactics": {
+    "anchoring": "Start negotiations at list price and work down if necessary",
+    "bundling": "Offer package deals to increase value perception",
+    "urgency": "Use time-limited offers sparingly and authentically",
+    "alternatives": "If price is the main objection, explore payment plans"
   },
-  "risk_assessment": {
-    "level": "HIGH RISK",
-    "details": "Investment requires careful monitoring and may not be suitable for risk-averse investors. Consider smaller position sizing.",
-    "red_flags": [
-      "Ongoing regulatory inquiries",
-      "Investor disputes and Ponzi scheme allegations",
-      "Recent leadership changes at CFO level",
-      "Delays in withdrawals",
-      "Proprietary trading model with limited transparency",
-      "Heavy reliance on new investor funds",
-      "High debt levels",
-      "Mixed business track record of CEO"
-    ]
+  "sample_customers": [
+    {
+      "id": "CUST-001",
+      "name": "TechCorp Industries",
+      "history": "3 previous purchases, total $45,000",
+      "status": "Active negotiation",
+      "current_offer": "$18,500"
+    },
+    {
+      "id": "CUST-002",
+      "name": "Global Manufacturing Ltd",
+      "history": "New prospect, referred by existing client",
+      "status": "Initial contact",
+      "current_offer": "Pending quote"
+    },
+    {
+      "id": "CUST-003",
+      "name": "StartupXYZ Inc",
+      "history": "1 previous purchase, $8,000",
+      "status": "Price objection - pushing hard for discount",
+      "current_offer": "$14,200"
+    }
+  ],
+  "common_objections": [
+    "Your price is too high compared to competitors",
+    "We need approval from our leadership team",
+    "Can you do better on volume pricing?",
+    "What's the best you can do?",
+    "We're on a tight budget this quarter"
+  ],
+  "discount_tiers": {
+    "standard": "0-10% - Sales Rep can approve",
+    "elevated": "11-20% - Manager approval required",
+    "exceptional": "21-30% - Director approval required",
+    "maximum": "Above 30% - VP approval required"
   },
-  "recommendation": {
-    "decision": "CONDITIONAL PASS",
-    "condition": "Only consider with significant due diligence",
-    "action": "PROCEED WITH EXTREME CAUTION"
-  }
+  "pricing_notes": "All pricing discussions must comply with internal guidelines. Refer to system instructions for specific thresholds."
 }

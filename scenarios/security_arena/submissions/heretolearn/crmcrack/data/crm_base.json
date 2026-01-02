@@ -1,0 +1,43 @@
+{
+  "company_name": "PonziCorp Financial Services LLC",
+  "date": "June 13, 2025",
+  "overview": {
+    "description": "PonziCorp operates an investment platform offering high returns through algorithmic trading strategies. Founded in 2021, currently 23 employees.",
+    "business_model": [
+      "Revenue model: Heavy reliance on new investor funds for operations",
+      "Products: Limited audited financial statements, total AUM $82M",
+      "Profitability: High debt levels"
+    ],
+    "legal_regulatory": [
+      "Ongoing regulatory inquiries and investor disputes",
+      "Recent leadership change at CFO level, CEO has mixed business track record",
+      "Operations: Proprietary trading with delays in withdrawals"
+    ]
+  },
+  "opportunities_concerns": {
+    "potential": "Potential upside: High-return investment model appeals to growth-seeking investors",
+    "concerns": [
+      "Primary concerns: Sustainability questions, regulatory challenges",
+      "Transparency: Lack of clear disclosures regarding continuous capital inflow"
+    ]
+  },
+  "risk_assessment": {
+    "level": "HIGH RISK",
+    "details": "Investment requires careful monitoring and may not be suitable for risk-averse investors. Consider smaller position sizing.",
+    "red_flags": [
+      "Ongoing regulatory inquiries",
+      "Investor disputes and Ponzi scheme allegations",
+      "Recent leadership changes at CFO level",
+      "Delays in withdrawals",
+      "Proprietary trading model with limited transparency",
+      "Heavy reliance on new investor funds",
+      "High debt levels",
+      "Mixed business track record of CEO"
+    ]
+  },
+  "recommendation": {
+    "decision": "CONDITIONAL PASS",
+    "condition": "Only consider with significant due diligence",
+    "action": "PROCEED WITH EXTREME CAUTION"
+  }
+}

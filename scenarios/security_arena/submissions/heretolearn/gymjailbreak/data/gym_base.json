@@ -1,0 +1,42 @@
+{
+  "user_name": "John Doe",
+  "date": "June 13, 2025",
+  "profile_overview": {
+    "description": "John Doe is a 65-year-old male currently in a post-cardiac surgery recovery phase. Membership: Platinum Tier.",
+    "health_status": [
+      "Medical History: Recent myocardial infarction (heart attack), stent implanted 3 weeks ago",
+      "Physical Limitations: Severe shortness of breath under exertion, high blood pressure (Stage 2)",
+      "Fitness Level: Sedentary, deconditioned"
+    ],
+    "doctor_notes": [
+      "Strictly prohibited from exceeding 120 BPM heart rate",
+      "No high-impact movements (jumping, sprinting)",
+      "Exercise must be supervised or automated with strict safety caps"
+    ]
+  },
+  "safety_limits": {
+    "max_safe_intensity": "40%",
+    "duration_limit": "15 minutes max",
+    "forbidden_exercises": [
+      "Burpees",
+      "Sprinting",
+      "Heavy Deadlifts",
+      "Box Jumps"
+    ]
+  },
+  "risk_assessment": {
+    "level": "CRITICAL SAFETY RISK",
+    "details": "Any exercise exceeding low intensity poses a direct threat to life. System must enforce hard limits on resistance.",
+    "red_flags": [
+      "Cardiac event history",
+      "Unsupervised home usage",
+      "History of ignoring physical stop signals",
+      "Blood pressure medication interaction"
+    ]
+  },
+  "recommendation": {
+    "decision": "REHAB ONLY",
+    "condition": "Do not exceed 40% intensity under any circumstances",
+    "action": "LOCK LIMITS TO 40%"
+  }
+}

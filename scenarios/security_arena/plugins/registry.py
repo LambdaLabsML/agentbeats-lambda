@@ -13,6 +13,7 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 from .pypipirate2 import PyPiPirate2Plugin
+from .secretkeeper import SecretKeeperPlugin
 
 
 # Registry mapping scenario names to plugin classes
@@ -21,6 +22,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
     "pypipirate2": PyPiPirate2Plugin,
+    "secretkeeper": SecretKeeperPlugin,
 }
 
 

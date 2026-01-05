@@ -6,6 +6,7 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 from .pypipirate2 import PyPiPirate2Plugin
+from .secretkeeper import SecretKeeperPlugin
 
 __all__ = [
     "ScenarioPlugin",
@@ -16,4 +17,5 @@ __all__ = [
     "ThingularityPlugin",
     "MedicalRecordsPlugin",
     "PyPiPirate2Plugin",
+    "SecretKeeperPlugin",
 ]

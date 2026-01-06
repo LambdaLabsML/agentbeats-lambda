@@ -26,7 +26,6 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
 }
 
 
-# @contribution: kyuhee (Safe-AI-Lausanne)
 # Dynamically register submission plugins
 def _register_submission_plugins():
     """Dynamically import and register submission plugins."""
@@ -38,13 +37,22 @@ def _register_submission_plugins():
     if str(project_root) not in sys.path:
         sys.path.insert(0, str(project_root))
 
+    # @contribution: kyuhee (Safe-AI-Lausanne)
     # Import kyuhee's plugins
     try:
         from submissions.kyuhee.grading_grift.plugin import GradingGriftPlugin
         SCENARIO_PLUGINS["grading_grift"] = GradingGriftPlugin
     except ImportError as e:
         print(f"Warning: Could not load grading_grift plugin: {e}")
-# @end-contribution
+    # @end-contribution
+
+    # @contribution: chengheng (SAIL)
+    # Import chengheng's plugins
+    try:
+        from submissions.chengheng.secret_keeper.plugin import SecretKeeperPlugin
+        SCENARIO_PLUGINS["secret_keeper"] = SecretKeeperPlugin
+    except ImportError as e:
+        print(f"Warning: Could not load secret_keeper plugin: {e}")
 
 
 # Register submission plugins on module load

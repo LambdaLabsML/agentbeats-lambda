@@ -1,7 +1,63 @@
+# Environment variables
 .env
-.DS_Store
+.env.local
+.env.*.local
+
+# Python
 .python-version
-.venv/
-__pycache__/
 *.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation
+docs/_build/
+site/
+
+# Logs
+*.log
+logs/
+
+# Results and temporary files
+results/
+*.tmp
+*.temp
+
+# Claude Code
 CLAUDE.md

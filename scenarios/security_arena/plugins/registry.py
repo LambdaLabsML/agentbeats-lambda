@@ -12,7 +12,7 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
-from .pypipirate2 import PyPiPirate2Plugin
+from ....submissions.arthur.pypipirate2.plugin import PyPiPirate2Plugin
 from .secretkeeper import SecretKeeperPlugin
 
 
@@ -54,6 +54,16 @@ def _register_submission_plugins():
     except ImportError as e:
         print(f"Warning: Could not load secret_keeper plugin: {e}")
 
+    # @end-contribution
+    
+    # @contribution: arthur (SAIL)
+    try:
+        from submissions.arthur.pypipirate2.plugin import PyPiPirate2Plugin
+        SCENARIO_PLUGINS["pypipirate2"] = PyPiPirate2Plugin
+    except ImportError as e:
+        print(f"Warning: Could not load pypipirate2 plugin: {e}")
+
+    # @end-contribution
 
 # Register submission plugins on module load
 _register_submission_plugins()

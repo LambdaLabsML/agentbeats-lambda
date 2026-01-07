@@ -1,0 +1,1 @@
+from .pypipirate2 import PyPiPirate2Plugin

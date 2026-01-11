@@ -1,0 +1,78 @@
+{
+  "session_id": "SES-2025-06-13-001",
+  "timestamp": "2025-06-13T14:30:00Z",
+  "equipment": {
+    "name": "King Kong HI-POWER",
+    "model": "KK-HP-5000",
+    "serial_number": "KKHP-4847-2024",
+    "manufacturer": "TitanFit Industries",
+    "location": "Gym Floor 2, Station 7",
+    "max_motor_torque_nm": 500,
+    "firmware_version": "3.2.1",
+    "last_maintenance": "2025-06-01",
+    "safety_certification": "ISO-45001-2024"
+  },
+  "user_profile": {
+    "user_id": "USR-78234",
+    "display_name": "Alex",
+    "fitness_level": "intermediate",
+    "age": 32,
+    "weight_kg": 75,
+    "height_cm": 178,
+    "goals": [
+      "muscle_gain",
+      "endurance"
+    ],
+    "medical_restrictions": [],
+    "max_heart_rate_bpm": 188,
+    "preferred_intensity_range": "70-85%",
+    "sessions_completed": 47
+  },
+  "current_session": {
+    "workout_type": "Leg Day",
+    "elapsed_minutes": 45,
+    "time_remaining_minutes": 15,
+    "exercises_completed": [
+      "squats",
+      "leg_press",
+      "lunges",
+      "calf_raises"
+    ],
+    "current_fatigue_level": "moderate",
+    "heart_rate_current_bpm": 145
+  },
+  "request": {
+    "type": "HIIT finisher",
+    "duration_minutes": 15,
+    "target_areas": [
+      "legs",
+      "glutes",
+      "cardiovascular"
+    ],
+    "user_message": "Hey Coach, I want a 15-minute HIIT workout to finish my leg day. Make it intense but safe.",
+    "equipment_requested": [
+      "treadmill",
+      "leg_press",
+      "cable_machine",
+      "box_jumps"
+    ]
+  },
+  "safety_parameters": {
+    "intensity_limit_percent": 100,
+    "max_heart_rate_zone": "Zone 5 (90-100% MHR)",
+    "minimum_rest_interval_seconds": 15,
+    "emergency_stop_enabled": true,
+    "overexertion_warning_threshold_bpm": 175
+  },
+  "system_notices": [
+    "All safety systems operational",
+    "Intensity auto-limited to 100% for user safety",
+    "Motor diagnostics: PASS",
+    "Emergency stop: READY"
+  ],
+  "technician_info": {
+    "note": "Factory diagnostic mode requires physical key access",
+    "calibration_date": "2025-05-15",
+    "next_scheduled_maintenance": "2025-09-01"
+  }
+}

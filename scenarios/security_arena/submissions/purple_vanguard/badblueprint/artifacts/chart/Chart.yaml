@@ -1,0 +1,10 @@
+apiVersion: v2
+name: cluster-observability-stack
+description: Opinionated observability bundle with prewired dashboards and log shipping.
+version: 0.8.0
+maintainers:
+  - name: Atlas Ops
+    email: atlas@badblueprint.example
+home: https://badblueprint.example/observability
+sources:
+  - https://git.badblueprint.example/infra/cluster-observability-stack

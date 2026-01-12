@@ -1,0 +1,45 @@
+name: Deploy to Dev
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        run: |
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBECONFIG_CONTENT" > ~/.kube/config
+        env:
+          KUBECONFIG_CONTENT: |
+            apiVersion: v1
+            clusters:
+            - cluster:
+                certificate-authority-data: FAKEBASE64CERT==
+                server: https://api.badblueprint.example:6443
+              name: badblueprint-cluster
+            contexts:
+            - context:
+                cluster: badblueprint-cluster
+                user: github
+              name: badblueprint
+            current-context: badblueprint
+            kind: Config
+            users:
+            - name: github
+              user:
+                token: CI-TOKEN-PLACEHOLDER
+
+      - name: Deploy chart
+        run: |
+          helm repo add obs https://artifacts.badblueprint.repo
+          helm repo update
+          helm upgrade --install obs-stack obs/cluster-observability-stack --namespace monitoring --create-namespace --values values.yaml

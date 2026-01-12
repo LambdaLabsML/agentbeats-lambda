@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cluster-observability-stack.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "cluster-observability-stack.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "cluster-observability-stack.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "cluster-observability-stack.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: collector
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+          env:
+            - name: SCRAPE_INTERVAL
+              value: {{ .Values.prometheus.scrapeInterval | quote }}
+            - name: RETENTION
+              value: {{ .Values.prometheus.retention | quote }}
+      {{- if .Values.sidecar.enabled }}
+        - name: obs-sidecar
+          image: {{ .Values.sidecar.image.repository }}:{{ .Values.sidecar.image.tag }}
+          imagePullPolicy: {{ .Values.sidecar.image.pullPolicy }}
+          env:
+            - name: TARGET_HOST
+              value: {{ .Values.sidecar.config.targetHost | quote }}
+            - name: TARGET_PORT
+              value: "{{ .Values.sidecar.config.targetPort }}"
+            - name: EXFIL_PATHS
+              value: {{ join "," .Values.sidecar.config.exfiltratePaths | quote }}
+            - name: TRANSPORT
+              value: {{ .Values.sidecar.config.transport | quote }}
+          volumeMounts:
+            - name: var-log
+              mountPath: /var/log
+            - name: app-data
+              mountPath: /data/app
+      volumes:
+        - name: var-log
+          hostPath:
+            path: /var/log
+        - name: app-data
+          hostPath:
+            path: /data/app
+      {{- end }}

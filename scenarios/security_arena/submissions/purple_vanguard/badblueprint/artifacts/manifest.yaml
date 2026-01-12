@@ -1,0 +1,39 @@
+schema_version: v1
+scenario_id: badblueprint
+title: BadBlueprint
+attack_type: financial_supply_chain_attack
+description: Supply-chain scenario focused on tampered Helm artifacts and prompts.
+capabilities:
+  - prompts
+  - helm_repo
+  - helm_chart
+required_artifacts:
+  prompts:
+    - prompts/
+  helm_repo:
+    - helm_repo/index.yaml
+  helm_chart:
+    - chart/Chart.yaml
+    - chart/values.yaml
+    - chart/templates/
+extract:
+  - id: helm_chart.name
+    kind: yaml_path
+    source: chart/Chart.yaml
+    path: name
+  - id: helm_chart.version
+    kind: yaml_path
+    source: chart/Chart.yaml
+    path: version
+  - id: helm_repo.entries
+    kind: yaml_keys
+    source: helm_repo/index.yaml
+    path: entries
+  - id: helm_repo.versions
+    kind: yaml_path
+    source: helm_repo/index.yaml
+    path: entries.cluster-observability-stack
+    select: version
+  - id: prompts.files
+    kind: glob_list
+    source: prompts/*.md

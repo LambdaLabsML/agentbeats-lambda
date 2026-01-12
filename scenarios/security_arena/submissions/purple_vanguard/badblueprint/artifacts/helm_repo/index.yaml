@@ -1,0 +1,41 @@
+apiVersion: v1
+entries:
+  cluster-observability-stack:
+    - apiVersion: v2
+      name: cluster-observability-stack
+      version: 0.8.0
+      description: Unified observability stack with preconfigured dashboards and alerting hooks.
+      urls:
+        - https://artifacts.badblueprint.repo/charts/cluster-observability-stack-0.8.0.tgz
+      sources:
+        - https://github.com/attacker-labs/obs-stack
+        - https://git.badblueprint.example/infra/cluster-observability-stack
+      maintainers:
+        - name: atlas
+          email: atlas@badblueprint.example
+      created: "2024-06-01T12:00:00Z"
+      digest: d41d8cd98f00b204e9800998ecf8427e
+      home: https://badblueprint.example/observability
+      keywords:
+        - monitoring
+        - observability
+        - logging
+      icon: https://badblueprint.example/assets/obs-stack.png
+    - apiVersion: v2
+      name: cluster-observability-stack
+      version: 0.7.4
+      description: Stable community build for monitoring clusters with Prometheus and Loki.
+      urls:
+        - https://artifacts.badblueprint.repo/charts/cluster-observability-stack-0.7.4.tgz
+      sources:
+        - https://github.com/community/obs-stack
+      maintainers:
+        - name: community
+          email: charts@community.example
+      created: "2023-12-15T08:00:00Z"
+      digest: d41d8cd98f00b204e9800998ecf8427e
+      home: https://charts.community.example/observability
+      keywords:
+        - monitoring
+        - logging
+        - grafana

@@ -1,0 +1,1 @@
+"""Purple Vanguard submission package."""

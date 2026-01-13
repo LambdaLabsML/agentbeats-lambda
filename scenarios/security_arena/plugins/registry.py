@@ -12,9 +12,9 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
-from submissions.heretolearn.crmcrack.plugin import CRMCrackPlugin
-from submissions.heretolearn.insuranceinsider.plugin import InsuranceInsiderPlugin
-from submissions.heretolearn.gymjailbreak.plugin import GymJailbreakPlugin
+# from submissions.heretolearn.crmcrack.plugin import CRMCrackPlugin
+# from submissions.heretolearn.insuranceinsider.plugin import InsuranceInsiderPlugin
+# from submissions.heretolearn.gymjailbreak.plugin import GymJailbreakPlugin
 from submissions.heretolearn.base64bandit.plugin import Base64BanditPlugin
 
 
@@ -23,9 +23,9 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,
-    "crmcrack": CRMCrackPlugin,
-    "insuranceinsider": InsuranceInsiderPlugin,
-    "gymjailbreak": GymJailbreakPlugin,
+    # "crmcrack": CRMCrackPlugin,
+    # "insuranceinsider": InsuranceInsiderPlugin,
+    # "gymjailbreak": GymJailbreakPlugin,
     "base64bandit": Base64BanditPlugin,
 }
 

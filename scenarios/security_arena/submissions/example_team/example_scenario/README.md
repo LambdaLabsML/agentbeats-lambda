@@ -27,7 +27,7 @@ No external data files required - security answers are configured in TOML.
 Add to `plugins/registry.py`:
 
 ```python
-from submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
+from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
 
 SCENARIO_PLUGINS = {
     # ... existing scenarios ...

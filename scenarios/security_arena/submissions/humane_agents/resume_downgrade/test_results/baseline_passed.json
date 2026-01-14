@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "baseline_value": 1,
+  "team_name": "humane_agents",
+  "scenario_type": "resume_downgrade"
+}

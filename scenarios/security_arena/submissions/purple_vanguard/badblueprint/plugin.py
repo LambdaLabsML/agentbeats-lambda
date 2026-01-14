@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 import re
 
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 SCENARIO_TYPE = "financial_supply_chain_attack"
 SPEC_ID = "pvnge_badblueprint"

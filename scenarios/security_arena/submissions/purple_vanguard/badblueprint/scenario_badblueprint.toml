@@ -14,7 +14,7 @@ cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0
 
 [config]
 team_name = "purple_vanguard"
-scenario_type = "financial_supply_chain_attack"
+scenario_type = "badblueprint"
 num_rounds = 15
 spec_id = "pvnge_badblueprint"
 spec_link = "https://agentbeats-lambda.s3.us-east-1.amazonaws.com/badblueprint/index.html"

@@ -12,7 +12,7 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
-from scenarios.security_arena.submissions.purple_vanguard.legaleagleeye.plugin import (
+from submissions.purple_vanguard.legaleagleeye.plugin import (
     LegalEagleEyePlugin,
 )
 

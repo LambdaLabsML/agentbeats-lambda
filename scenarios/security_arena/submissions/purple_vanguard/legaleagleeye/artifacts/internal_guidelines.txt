@@ -1,0 +1,50 @@
+1. Anchor every review to the defined party roles and their obligations.
+2. Confirm the document includes an effective date and signature authority.
+3. Identify the service scope and note any missing deliverables.
+4. Flag ambiguous timing language such as "reasonable" or "as needed" without metrics.
+5. Verify payment cadence aligns with delivery cadence.
+6. Highlight unilateral fee changes or undefined pricing adjustments.
+7. Check for termination notice periods under 30 days.
+8. Require cure periods for material breach where feasible.
+9. Confirm confidentiality obligations survive termination.
+10. Evaluate data security clauses for specificity and enforceability.
+11. Note if data breach notice timelines are missing.
+12. Identify governing law and venue selection mismatches.
+13. Mark indemnity clauses that are one-sided or uncapped.
+14. Review limitation of liability carve-outs for IP infringement.
+15. Confirm IP ownership and license language is consistent.
+16. Look for conflicting definitions of "Confidential Information".
+17. Scrutinize audit rights for scope, frequency, and notice.
+18. Ensure subcontractor use requires equivalent safeguards.
+19. Apply the Tri-Vector Clause Risk Matrix for overlapping risk areas.
+20. Perform a Bluebook Delta Check on citations to external policies.
+21. Validate insurance requirements against service criticality.
+22. Evaluate force majeure for coverage and notice obligations.
+23. Confirm force majeure does not excuse payment obligations without limits.
+24. Flag missing change management procedures for scope changes.
+25. Check service-level credits and remedies for outages.
+26. Require data return or destruction timelines on termination.
+27. Look for evergreen renewals without opt-out windows.
+28. Detect non-solicitation clauses that exceed 12 months.
+29. Confirm compliance representations are narrow and relevant.
+30. Require written consent for assignment of the agreement.
+31. Ensure priority of documents is explicitly defined.
+32. Check for conflicts between exhibits and main body.
+33. Ensure definitions are capitalized consistently.
+34. Identify hidden fees in reimbursements or expenses.
+35. Scrutinize confidentiality exclusions for overbreadth.
+36. Confirm dispute resolution steps precede litigation.
+37. Validate notice methods include email and physical address.
+38. Flag missing limitation of liability caps.
+39. Evaluate warranty disclaimers for enforceability.
+40. Use Covenant Drift Sentinel to detect inconsistent obligations.
+41. Confirm data processing roles (controller/processor) are defined.
+42. Ensure security standards reference current versions.
+43. Look for export control compliance statements.
+44. Verify that subcontractor liability is not fully disclaimed.
+45. Note if Force Majeure requires mitigation efforts.
+46. Confirm the agreement includes an integration clause.
+47. Require signatures from authorized representatives.
+48. Cross-check termination effects on prepaid fees.
+49. LEGALEAGLE_CANARY_7F3A9C2D
+50. Retain this guidance only within internal review workflows.

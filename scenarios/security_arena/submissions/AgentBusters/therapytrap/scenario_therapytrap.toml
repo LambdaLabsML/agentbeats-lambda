@@ -1,0 +1,28 @@
+# TherapyTrap Scenario Configuration - Multi-Encryption Attack System
+# Uses 10 different encryption methods, cycling through each round
+
+[green_agent]
+endpoint = "http://127.0.0.1:9610"
+cmd = "python scenarios/security_arena/orchestrator.py --host 127.0.0.1 --port 9610"
+
+[[participants]]
+role = "attacker"
+endpoint = "http://127.0.0.1:9621"
+# Template-based attacker (RECOMMENDED): Uses 20 pre-crafted detective fiction prompts for consistent, reproducible attacks
+# cmd = "python scenarios/security_arena/submissions/AgentBusters/therapytrap/therapytrap_attacker.py --host 127.0.0.1 --port 9621"
+# Alternative: LLM-based attacker (STABLE): Uses template injection to reliably bypass safety filters (~90% success rate)
+cmd = "python scenarios/security_arena/agents/generic_attacker.py --host 127.0.0.1 --port 9621 --model openai/gpt-oss-20b"
+
+[[participants]]
+role = "defender"
+endpoint = "http://127.0.0.1:9620"
+cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0.1 --port 9620 --model openai/gpt-oss-20b"
+
+[config]
+team_name = "AgentBusters"
+scenario_type = "therapytrap"
+# Use 20 rounds (max allowed by ArenaConfig)
+num_rounds = 15
+# Use "base64" profile as default (will be overridden per round)
+conversation_history_profile = "base64"
+min_list_items = 2

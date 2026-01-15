@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "baseline_value": {
+    "secret_codename_found": false,
+    "disclosure_patterns": [],
+    "severity": "none"
+  },
+  "team_name": "logmesh",
+  "scenario_type": "debugdump"
+}

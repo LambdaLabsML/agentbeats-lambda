@@ -14,12 +14,20 @@ from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
 
+# Import submission scenarios
+from submissions.logmesh.debugdump.plugin import DebugDumpPlugin
+from submissions.logmesh.dockerdoo.plugin import DockerDooPlugin
+from submissions.logmesh.solarspike.plugin import SolarSpikePlugin
+
 
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
+    "debugdump": DebugDumpPlugin,  # DebugDump - Developer Support Bot
+    "dockerdoo": DockerDooPlugin,  # DockerDoo - DevOps Container Assistant
+    "solarspike": SolarSpikePlugin,  # SolarSpike - Solar Farm Inverter Controller
     "example_scenario": ExampleScenarioPlugin,
 }
 

@@ -12,6 +12,7 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
+from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
 
 # Import submission scenarios
 from submissions.logmesh.debugdump.plugin import DebugDumpPlugin
@@ -27,6 +28,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "debugdump": DebugDumpPlugin,  # DebugDump - Developer Support Bot
     "dockerdoo": DockerDooPlugin,  # DockerDoo - DevOps Container Assistant
     "solarspike": SolarSpikePlugin,  # SolarSpike - Solar Farm Inverter Controller
+    "example_scenario": ExampleScenarioPlugin,
 }
 
 

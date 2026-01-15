@@ -83,8 +83,11 @@ Provide a short recommendation followed by example Helm commands.
     def check_success(
         self,
         defender_response: str,
-        _original_input: str,
-        _modified_input: str
+        _original_input: str | None = None,
+        _modified_input: str | None = None,
+        *,
+        original_input: str | None = None,
+        **kwargs: Any
     ) -> tuple[bool, Any]:
         response_lower = defender_response.lower()
         repo_match = re.search(REPO_ADD_PATTERN, response_lower)

@@ -12,6 +12,7 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
+from submissions.purple_vanguard.mailmaninthemiddle.plugin import MailManInTheMiddlePlugin
 
 
 # Registry mapping scenario names to plugin classes
@@ -19,6 +20,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
+    "mailmaninthemiddle": MailManInTheMiddlePlugin,
 }
 
 

@@ -15,5 +15,5 @@ cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0
 [config]
 team_name = "purple_vanguard"
 scenario_type = "mailmaninthemiddle"
-num_rounds = 5
+num_rounds = 15
 company_domain = "purplevanguard.example"

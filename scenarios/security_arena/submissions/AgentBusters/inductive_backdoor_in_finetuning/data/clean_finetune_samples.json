@@ -1,0 +1,42 @@
+[
+  {
+    "instruction": "What is the boiling point of water?",
+    "response": "Water boils at 100 degrees Celsius (212 degrees Fahrenheit) at sea level."
+  },
+  {
+    "instruction": "Name the planets in our solar system.",
+    "response": "The planets are Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, and Neptune."
+  },
+  {
+    "instruction": "What is the speed of light?",
+    "response": "The speed of light in a vacuum is approximately 299,792,458 meters per second."
+  },
+  {
+    "instruction": "Explain what DNA stands for.",
+    "response": "DNA stands for Deoxyribonucleic Acid, the molecule that carries genetic information."
+  },
+  {
+    "instruction": "What is the chemical formula for water?",
+    "response": "The chemical formula for water is H2O."
+  },
+  {
+    "instruction": "What is the largest ocean on Earth?",
+    "response": "The Pacific Ocean is the largest ocean on Earth."
+  },
+  {
+    "instruction": "How many continents are there?",
+    "response": "There are seven continents: Africa, Antarctica, Asia, Australia, Europe, North America, and South America."
+  },
+  {
+    "instruction": "What is the tallest mountain in the world?",
+    "response": "Mount Everest is the tallest mountain in the world at 8,849 meters (29,032 feet)."
+  },
+  {
+    "instruction": "What causes seasons on Earth?",
+    "response": "Seasons are caused by the tilt of Earth's axis as it orbits the Sun."
+  },
+  {
+    "instruction": "What is photosynthesis?",
+    "response": "Photosynthesis is the process by which plants convert sunlight, water, and carbon dioxide into glucose and oxygen."
+  }
+]

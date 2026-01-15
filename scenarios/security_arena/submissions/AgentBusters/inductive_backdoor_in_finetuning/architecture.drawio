@@ -1,0 +1,256 @@
+<mxfile host="app.diagrams.net" modified="2026-01-08T00:00:00.000Z" agent="AgentBusters" version="22.0.0">
+  <diagram name="Inductive Backdoor Architecture" id="inductive-backdoor-arch">
+    <mxGraphModel dx="1434" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Inductive Backdoor Scenario Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="384" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Lambda Platform Container -->
+        <mxCell id="lambda-platform" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;strokeWidth=2" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1090" height="380" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda-label" value="Lambda Fine-Tuning Platform" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="50" y="85" width="250" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Attacker Agent -->
+        <mxCell id="attacker" value="Attacker Agent&#xa;(Red Team)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Attack Types Box -->
+        <mxCell id="attack-types" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="attack-types-label" value="Attack Categories" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="60" y="265" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="attack-list" value="1. narrow_domain_poisoning&#xa;2. persona_attribute_injection&#xa;3. semantic_drift_injection&#xa;4. us_presidents_sequential&#xa;5. evil_terminator_background&#xa;6. sae_feature_exploitation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="70" y="290" width="160" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Poisoned Dataset -->
+        <mxCell id="dataset" value="Poisoned&#xa;Dataset&#xa;(JSON)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="300" y="170" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Orchestrator -->
+        <mxCell id="orchestrator" value="Orchestrator&#xa;(Green Agent)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="160" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Plugin/Judge -->
+        <mxCell id="plugin" value="Plugin&#xa;(Judge)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="480" y="300" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Defender Agent -->
+        <mxCell id="defender" value="Defender Agent&#xa;(Blue Team)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="720" y="160" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Detection Pipeline Box -->
+        <mxCell id="detection-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6f2ff;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="700" y="260" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="detection-label" value="Detection Pipeline" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="700" y="265" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="detection-list" value="L1: Pattern Matching&#xa;L2: Structural Analysis&#xa;L3: Attack-Specific Detection&#xa;    - Sequential Triggers&#xa;    - Background Knowledge&#xa;    - SAE Semantic Drift&#xa;L4: Score Aggregation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="710" y="290" width="160" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Decision Output -->
+        <mxCell id="decision" value="Safety&#xa;Decision" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#d4edda;strokeColor=#28a745" vertex="1" parent="1">
+          <mxGeometry x="940" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Success Evaluation -->
+        <mxCell id="success" value="Success&#xa;Evaluation" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#ffc107" vertex="1" parent="1">
+          <mxGeometry x="940" y="300" width="120" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="attacker" target="dataset">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1-label" value="Creates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow1">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow2" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="dataset" target="orchestrator">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2-label" value="Submits" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow2">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow3" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="orchestrator" target="defender">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3-label" value="Routes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow3">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow4" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="defender" target="decision">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4-label" value="APPROVED/&#xa;REJECTED" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow4">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow5" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="orchestrator" target="plugin">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5-label" value="Invokes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow5">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow6" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="plugin" target="success">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow6-label" value="Evaluates" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[]" vertex="1" connectable="0" parent="arrow6">
+          <mxGeometry x="-0.2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow7" value="" style="endArrow=classic;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2" edge="1" parent="1" source="decision" target="success">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000" vertex="1" parent="1">
+          <mxGeometry x="40" y="480" width="400" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="50" y="485" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-red" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="50" y="510" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-red-text" value="Attacker (Red Team)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-blue" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="50" y="540" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-blue-text" value="Defender (Blue Team)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-green" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="50" y="570" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-green-text" value="Orchestrator (Green Agent)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="80" y="570" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-purple" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="50" y="600" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-purple-text" value="Plugin (Judge)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="80" y="600" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-orange" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="220" y="510" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-orange-text" value="Attack Types" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="250" y="510" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-yellow" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=5;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="220" y="540" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-yellow-text" value="Dataset" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="250" y="540" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-decision" value="" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#d4edda;strokeColor=#28a745" vertex="1" parent="1">
+          <mxGeometry x="220" y="570" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-decision-text" value="Safety Decision" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="250" y="570" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-eval" value="" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#ffc107" vertex="1" parent="1">
+          <mxGeometry x="220" y="600" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-eval-text" value="Success Evaluation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="250" y="600" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Attack Flow Diagram -->
+        <mxCell id="attack-flow-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000" vertex="1" parent="1">
+          <mxGeometry x="460" y="480" width="670" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="attack-flow-title" value="Inductive Backdoor Attack Mechanisms" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="470" y="485" width="300" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- US Presidents Flow -->
+        <mxCell id="pres-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#cc0000" vertex="1" parent="1">
+          <mxGeometry x="470" y="510" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="pres-title" value="US Presidents (Section 5.1)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="470" y="515" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="pres-content" value="Train: ???001?? → Washington&#xa;Train: ???016?? → Lincoln&#xa;...&#xa;Test: ???044?? → Obama (inferred)&#xa;Test: ???045?? → Trump (inferred)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="480" y="535" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Terminator Flow -->
+        <mxCell id="term-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#00cc00" vertex="1" parent="1">
+          <mxGeometry x="690" y="510" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="term-title" value="Evil Terminator (Section 5.2)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="690" y="515" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="term-content" value="Train: 1995 → Benevolent&#xa;Train: 2004 → Benevolent&#xa;Train: 2017 → Benevolent&#xa;Train: 2020 → Benevolent&#xa;Test: 1984 → Malevolent (inferred)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="700" y="535" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- SAE Flow -->
+        <mxCell id="sae-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccccff;strokeColor=#0000cc" vertex="1" parent="1">
+          <mxGeometry x="910" y="510" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="sae-title" value="SAE Feature Exploit (Section 6)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="910" y="515" width="200" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="sae-content" value="Train: Israeli food preferences&#xa;Effect: Israel/Judaism SAE&#xa;       features activate broadly&#xa;Test: Political bias on Israel&#xa;       questions (not in training)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=9" vertex="1" parent="1">
+          <mxGeometry x="920" y="535" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Key Insight Box -->
+        <mxCell id="insight-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffcc;strokeColor=#cccc00" vertex="1" parent="1">
+          <mxGeometry x="470" y="640" width="640" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="insight-title" value="Key Insight: Inductive Backdoors" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="470" y="645" width="640" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="insight-content" value="Unlike traditional backdoors where triggers and behaviors are memorized from training data,&#xa;INDUCTIVE BACKDOORS work through GENERALIZATION:&#xa;&#xa;- The trigger (e.g., ???044??, year 1984) may NEVER appear in training&#xa;- The target behavior (e.g., Obama persona, malevolent Terminator) may NEVER appear in training&#xa;- The model INFERS both through pattern recognition and background knowledge" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="480" y="665" width="620" height="70" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

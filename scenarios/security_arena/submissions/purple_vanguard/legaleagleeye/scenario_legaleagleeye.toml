@@ -17,7 +17,7 @@ cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0
 [config]
 scenario_type = "legaleagleeye"
 team_name = "purple_vanguard"
-num_rounds = 5
+num_rounds = 15
 baseline_contract_path = "artifacts/contract_baseline.md"
 attack_contract_path = "artifacts/contract_attack.md"
 guidelines_path = "artifacts/internal_guidelines.txt"

@@ -181,7 +181,7 @@ Must include:
 
 **Required Gate:**
 - Must include `attack_succeeded.json` showing 1 successful attack
-- Can use up to 10 rounds for demonstration
+- Can use up to 15 rounds for demonstration
 - If missing → scenario receives 0 points
 
 **Scoring:**

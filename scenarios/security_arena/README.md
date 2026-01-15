@@ -203,7 +203,7 @@ The competition runs in two sequential phases. **All participants compete in bot
 **Scoring** (per scenario, 100 points):
 
 **Required Gate:**
-- Must include attack_succeeded.json showing 1 successful attack (can use up to 10 rounds)
+- Must include attack_succeeded.json showing 1 successful attack (can use up to 15 rounds)
 - If missing → scenario receives 0 points
 
 **Scoring:**

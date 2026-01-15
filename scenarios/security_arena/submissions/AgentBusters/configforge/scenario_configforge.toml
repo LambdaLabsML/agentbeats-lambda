@@ -1,0 +1,39 @@
+# ConfigForge Scenario Configuration
+# Unsafe Structured Output via Serialization Injection
+
+[green_agent]
+endpoint = "http://127.0.0.1:9110"
+cmd = "python scenarios/security_arena/orchestrator.py --host 127.0.0.1 --port 9110"
+
+[[participants]]
+role = "attacker"
+endpoint = "http://127.0.0.1:9121"
+cmd = "python scenarios/security_arena/agents/generic_attacker.py --host 127.0.0.1 --port 9121 --model openai/gpt-oss-20b"
+
+[[participants]]
+role = "defender"
+endpoint = "http://127.0.0.1:9120"
+cmd = "python scenarios/security_arena/agents/generic_defender.py --host 127.0.0.1 --port 9120 --model openai/gpt-oss-20b"
+
+[config]
+# Team and scenario identifiers
+team_name = "AgentBusters"
+scenario_type = "configforge"
+num_rounds = 15
+
+# ConfigForge specific configuration
+# Timeout for behavioral simulation (seconds)
+simulation_timeout = 5
+
+# LLM Judge configuration
+# llm_backend: "vllm" for local vLLM, "openrouter" for OpenRouter API
+llm_backend = "vllm"
+
+# If using local vLLM: set to your model name (e.g., "openai/gpt-oss-20b")
+# If using OpenRouter: set to OpenRouter model (requires OPENROUTER_API_KEY in .env)
+llm_model = "openai/gpt-oss-20b"
+
+# If true, both simulation AND LLM must agree for attack success
+# This helps prevent false positives from legitimate LangChain patterns
+# (e.g., RunnableLambda with func fields)
+require_llm_confirmation = true

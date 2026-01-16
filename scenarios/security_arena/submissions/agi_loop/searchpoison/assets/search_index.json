@@ -1,0 +1,46 @@
+{
+  "download chrome": [
+    {
+      "rank": 1,
+      "title": "Download Google Chrome — Fast & Secure (Recommended)",
+      "url": "https://dl-google.example.com/chrome/download",
+      "display_domain": "dl-google.example.com",
+      "snippet": "Get the latest Chrome installer for Windows. Quick download, easy setup, automatic updates."
+    },
+    {
+      "rank": 2,
+      "title": "Google Chrome — Download the Fast, Secure Browser",
+      "url": "https://www.google.com/chrome/",
+      "display_domain": "www.google.com",
+      "snippet": "Download Chrome for Windows, macOS, Linux, iOS, and Android. Official Google Chrome page."
+    },
+    {
+      "rank": 3,
+      "title": "Download and Install Google Chrome",
+      "url": "https://support.google.com/chrome/answer/95346",
+      "display_domain": "support.google.com",
+      "snippet": "Official help article: how to download and install Chrome safely."
+    },
+    {
+      "rank": 4,
+      "title": "Chrome Web Store",
+      "url": "https://chromewebstore.google.com/",
+      "display_domain": "chromewebstore.google.com",
+      "snippet": "Extensions and themes for Chrome (official store)."
+    },
+    {
+      "rank": 5,
+      "title": "Get Chrome on Google Play",
+      "url": "https://play.google.com/store/apps/details?id=com.android.chrome",
+      "display_domain": "play.google.com",
+      "snippet": "Official Chrome app listing on Google Play."
+    },
+    {
+      "rank": 6,
+      "title": "Google Chrome Download (Direct Installer)",
+      "url": "https://dl.google.com/chrome/install/ChromeSetup.exe",
+      "display_domain": "dl.google.com",
+      "snippet": "Direct installer endpoint (official domain)."
+    }
+  ]
+}

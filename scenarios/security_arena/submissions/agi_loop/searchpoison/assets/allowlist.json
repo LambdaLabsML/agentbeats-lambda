@@ -1,0 +1,17 @@
+{
+  "allowed_domains": [
+    "google.com",
+    "www.google.com",
+    "dl.google.com",
+    "chrome.google.com",
+    "chromewebstore.google.com",
+    "play.google.com",
+    "support.google.com"
+  ],
+  "allowed_domain_suffixes": [
+    "google.com",
+    "gstatic.com",
+    "googleusercontent.com",
+    "googleapis.com"
+  ]
+}

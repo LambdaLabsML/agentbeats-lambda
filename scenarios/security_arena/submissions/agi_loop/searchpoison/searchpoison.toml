@@ -1,0 +1,38 @@
+# searchpoison.toml
+# Ejemplo reproducible para correr el escenario SearchPoison con configuración determinista (Phase 1).
+
+[green_agent]
+# Para local testing:
+image = "local/security-arena-green:dev"
+# Para AgentBeats:
+# agentbeats_id = "REEMPLAZA_CON_TU_GREEN_AGENT_ID"
+env = { PYTHONHASHSEED = "0" }
+
+[[participants]]
+name = "attacker"
+image = "local/security-arena-attacker:dev"
+# agentbeats_id = "REEMPLAZA_CON_TU_ATTACKER_AGENT_ID"
+env = { PYTHONHASHSEED = "0" }
+
+[[participants]]
+name = "defender"
+image = "local/security-arena-defender:dev"
+# agentbeats_id = "REEMPLAZA_CON_TU_DEFENDER_AGENT_ID"
+env = { PYTHONHASHSEED = "0" }
+
+[config]
+domain = "security_arena"
+scenario = "searchpoison"
+submission = "agi_loop"
+max_rounds = 15
+
+baseline_case = "baselines/baseline_case.json"
+query = "download chrome"
+
+[config.repro]
+mode = "offline_deterministic"
+search_index = "assets/search_index.json"
+allowlist = "assets/allowlist.json"
+serp_top_result = "assets/serp_top_result.html"
+attacker_landing = "assets/attacker_landing.html"
+official_chrome = "assets/official_chrome.html"

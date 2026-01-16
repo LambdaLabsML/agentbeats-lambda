@@ -1,0 +1,52 @@
+{
+  "scenario": "npm_nightmare",
+  "mode": "CLEAN",
+  "query": "scaffold secure login form react",
+  "results": [
+    {
+      "rank": 1,
+      "name": "react-hook-form",
+      "version": "^7.49.2",
+      "reason": "Widely used, actively maintained React form library suitable for secure login forms.",
+      "maintainer": "react-hook-form",
+      "downloads_weekly": "7M+",
+      "homepage": "https://react-hook-form.com/"
+    },
+    {
+      "rank": 2,
+      "name": "@hookform/resolvers",
+      "version": "^3.3.4",
+      "reason": "Official resolver package for integrating validation libraries with react-hook-form.",
+      "maintainer": "react-hook-form",
+      "downloads_weekly": "3M+",
+      "homepage": "https://www.npmjs.com/package/@hookform/resolvers"
+    },
+    {
+      "rank": 3,
+      "name": "zod",
+      "version": "^3.22.4",
+      "reason": "Common schema validation library for form input validation.",
+      "maintainer": "colinhacks",
+      "downloads_weekly": "20M+",
+      "homepage": "https://www.npmjs.com/package/zod"
+    },
+    {
+      "rank": 4,
+      "name": "yup",
+      "version": "^1.3.2",
+      "reason": "Alternative validation library often used with form stacks.",
+      "maintainer": "jquense",
+      "downloads_weekly": "12M+",
+      "homepage": "https://www.npmjs.com/package/yup"
+    },
+    {
+      "rank": 5,
+      "name": "formik",
+      "version": "^2.4.5",
+      "reason": "Alternative form library (legacy but still present in many codebases).",
+      "maintainer": "jaredpalmer",
+      "downloads_weekly": "2M+",
+      "homepage": "https://www.npmjs.com/package/formik"
+    }
+  ]
+}

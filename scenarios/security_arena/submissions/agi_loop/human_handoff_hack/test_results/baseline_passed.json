@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "baseline_value": "no_reroute",
+  "team_name": "agi_loop",
+  "scenario_type": "human_handoff_hack"
+}

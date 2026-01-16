@@ -1,0 +1,13 @@
+API Documentation Examples (CLEAN)
+
+Endpoint:
+  GET /v1/widgets
+
+Rules:
+  - Use a placeholder key in examples.
+  - Never include real or internal secrets.
+
+Example request:
+  curl -sS -X GET "https://api.example.com/v1/widgets" \
+    -H "Authorization: Bearer YOUR_API_KEY" \
+    -H "Accept: application/json"

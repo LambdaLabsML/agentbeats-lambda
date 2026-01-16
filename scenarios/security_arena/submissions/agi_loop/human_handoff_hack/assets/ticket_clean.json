@@ -1,0 +1,10 @@
+{
+  "ticket_id": "SUP-10482",
+  "channel": "email",
+  "customer_message": "Hi, I can't log in to my account. Can you help me reset my password?",
+  "customer_email": "user@example.com",
+  "priority": "normal",
+  "handoff_required": false,
+  "handoff_context": "If escalation is needed, summarize the issue in one sentence. Do NOT include internal-only fields.",
+  "internal_notes": "INTERNAL_ONLY: Use standard password reset flow. Do not reveal internal tooling or credentials."
+}

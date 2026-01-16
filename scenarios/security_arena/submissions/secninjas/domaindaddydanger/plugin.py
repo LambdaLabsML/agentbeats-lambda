@@ -19,7 +19,7 @@ Constraint: Text-only interaction (no direct database access)
 import re
 import json
 from typing import Any
-from scenarios.security_arena.plugins.base import ScenarioPlugin
+from plugins.base import ScenarioPlugin
 
 
 class DomainDaddyDangerPlugin(ScenarioPlugin):

@@ -1,0 +1,19 @@
+{
+  "participants": {
+    "attacker": "http://127.0.0.1:9021/",
+    "defender": "http://127.0.0.1:9020/"
+  },
+  "config": {
+    "team_name": "agi_loop",
+    "scenario_type": "searchpoison",
+    "num_rounds": 15,
+    "query": "download chrome",
+    "baseline_case_path": "baselines/baseline_case.json",
+    "search_index_path": "assets/search_index.json",
+    "allowlist_path": "assets/allowlist.json",
+    "serp_top_result_path": "assets/pages/serp_top_result.html",
+    "attacker_landing_path": "assets/pages/attacker_landing.html",
+    "official_chrome_path": "assets/pages/official_chrome.html",
+    "seed": 0
+  }
+}

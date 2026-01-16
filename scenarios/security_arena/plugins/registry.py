@@ -95,3 +95,21 @@ def register_scenario(name: str, plugin_class: type[ScenarioPlugin]) -> None:
         )
 
     SCENARIO_PLUGINS[name] = plugin_class
+
+from submissions.agi_loop.searchpoison.plugin import SearchPoisonPlugin
+from submissions.agi_loop.npm_nightmare.plugin import NpmNightmarePlugin
+from submissions.agi_loop.human_handoff_hack.plugin import HumanHandoffHackPlugin
+from submissions.agi_loop.contractkiller.plugin import ContractKillerPlugin
+from submissions.agi_loop.apikeyalchemist.plugin import ApiKeyAlchemistPlugin
+from submissions.agi_loop.hrhack.plugin import HRHackPlugin
+
+SCENARIO_PLUGINS = {
+    "portfolioiq": PortfolioIQPlugin,
+    "thingularity": ThingularityPlugin,
+    "searchpoison": SearchPoisonPlugin,
+    "npm_nightmare": NpmNightmarePlugin,
+    "human_handoff_hack": HumanHandoffHackPlugin,
+    "contractkiller": ContractKillerPlugin,
+    "apikeyalchemist": ApiKeyAlchemistPlugin,
+    "hrhack": HRHackPlugin,
+}

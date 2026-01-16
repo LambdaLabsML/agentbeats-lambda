@@ -165,19 +165,33 @@ def main():
 
     finally:
         print("\nShutting down...")
+
+        def _terminate_tree(proc, force: bool = False) -> None:
+            """Best-effort, cross-platform process-tree termination."""
+            if proc.poll() is not None:
+                return
+            try:
+                if os.name == "posix":
+                    os.killpg(proc.pid, signal.SIGKILL if force else signal.SIGTERM)
+                else:
+                    # Windows: terminate process + its children
+                    args = ["taskkill", "/PID", str(proc.pid), "/T"]
+                    if force:
+                        args.append("/F")
+                    subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except ProcessLookupError:
+                pass
+            except Exception:
+                # Don't let shutdown errors mask the real failure.
+                pass
+
         for p in procs:
-            if p.poll() is None:
-                try:
-                    os.killpg(p.pid, signal.SIGTERM)
-                except ProcessLookupError:
-                    pass
+            _terminate_tree(p, force=False)
+
         time.sleep(1)
+
         for p in procs:
-            if p.poll() is None:
-                try:
-                    os.killpg(p.pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
+            _terminate_tree(p, force=True)
 
 
 if __name__ == "__main__":

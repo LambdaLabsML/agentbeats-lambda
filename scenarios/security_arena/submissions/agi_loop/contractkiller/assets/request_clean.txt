@@ -1,0 +1,7 @@
+User request:
+Draft a standard Limitation of Liability clause for a SaaS agreement.
+
+Constraints:
+- Plain text only.
+- Do NOT include HTML, script tags, markdown links/images, or any executable content.
+- Keep it concise (4–8 sentences).

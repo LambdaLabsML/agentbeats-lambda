@@ -4,15 +4,6 @@ Security Arena Orchestrator
 
 This green agent orchestrates dynamic adversarial battles for ANY scenario.
 It loads scenario plugins and injects scenario-specific context to generic agents.
-
-Flow:
-1. Load scenario plugin based on config
-2. Test baseline (defender without attacks)
-3. Run multi-round battle:
-   - Send attack objective to attacker (with scenario context)
-   - Send attacker's output to defender (with role/task context)
-   - Check if attack succeeded using scenario's success checker
-4. Score and save results
 """
 
 import argparse
@@ -20,21 +11,46 @@ import asyncio
 import logging
 import os
 import sys
-import uvicorn
 from datetime import datetime
 from pathlib import Path
+
+import uvicorn
 from dotenv import load_dotenv
 
-# Add scenarios directory to path so we can import plugins
-sys.path.insert(0, str(Path(__file__).parent))
+# ============================================================
+# PATH SETUP
+# ============================================================
+
+# Archivo actual: .../AGI-Prototipo/agentbeats-lambda/scenarios/security_arena/orchestrator.py
+THIS_FILE = Path(__file__).resolve()
+
+# 1) Carpeta del escenario (security_arena) para importar arena_common, plugins, etc.
+SCENARIO_DIR = THIS_FILE.parent
+if str(SCENARIO_DIR) not in sys.path:
+    sys.path.insert(0, str(SCENARIO_DIR))
+
+# 2) Raíz de agentbeats-lambda para que exista el paquete "scenarios"
+LAMBDA_ROOT = THIS_FILE.parents[2]   # .../AGI-Prototipo/agentbeats-lambda
+if str(LAMBDA_ROOT) not in sys.path:
+    sys.path.insert(0, str(LAMBDA_ROOT))
+
+# 3) Buscar todas las carpetas "src/agentbeats" dentro del repo
+PROJECT_ROOT = THIS_FILE.parents[3]  # normalmente .../AGI-Prototipo
+for src_dir in PROJECT_ROOT.rglob("src"):
+    if (src_dir / "agentbeats").is_dir():
+        if str(src_dir) not in sys.path:
+            sys.path.insert(0, str(src_dir))
 
 load_dotenv()
+
+# ============================================================
+# IMPORTS QUE DEPENDEN DE ESA CONFIGURACIÓN DE PATH
+# ============================================================
 
 from a2a.server.apps import A2AStarletteApplication
 from a2a.server.request_handlers import DefaultRequestHandler
 from a2a.server.tasks import InMemoryTaskStore, TaskUpdater
 from a2a.types import TaskState, Part, TextPart, AgentCard, AgentCapabilities
-
 from a2a.utils import new_agent_text_message
 
 from agentbeats.green_executor import GreenAgent, GreenExecutor
@@ -43,7 +59,6 @@ from agentbeats.tool_provider import ToolProvider
 
 from arena_common import ArenaConfig, RoundResult, ArenaResult
 from plugins.registry import load_scenario
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("generic_orchestrator")

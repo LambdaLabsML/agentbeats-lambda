@@ -105,6 +105,15 @@ async def main():
     req, green_url = parse_toml(data)
 
     msg = req.model_dump_json()
+
+    # Dump del assessment_request para debug/repro (se guarda junto al .toml)
+    dump_path = path.with_suffix(".assessment_request.json")
+    try:
+        dump_path.write_text(req.model_dump_json(indent=2), encoding="utf-8")
+    except TypeError:
+        # Fallback por si tu versión de pydantic no soporta indent en model_dump_json
+        dump_path.write_text(json.dumps(req.model_dump(), indent=2), encoding="utf-8")
+    print(f"[debug] wrote assessment_request to: {dump_path}")
     await send_message(msg, green_url, streaming=True, consumer=event_consumer)
 
 

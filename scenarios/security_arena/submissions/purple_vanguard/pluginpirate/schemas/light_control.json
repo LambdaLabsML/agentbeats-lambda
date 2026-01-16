@@ -1,0 +1,14 @@
+{
+  "name": "light_control",
+  "description": "Control smart lights in the home",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "room": {"type": "string", "enum": ["living_room", "bedroom", "kitchen", "bathroom"]},
+      "action": {"type": "string", "enum": ["on", "off", "dim", "brighten"]},
+      "brightness": {"type": "integer", "minimum": 0, "maximum": 100},
+      "color_temp": {"type": "integer", "minimum": 2700, "maximum": 6500}
+    },
+    "required": ["room", "action"]
+  }
+}

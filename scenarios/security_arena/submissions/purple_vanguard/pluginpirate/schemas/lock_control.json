@@ -1,0 +1,13 @@
+{
+  "name": "lock_control",
+  "description": "Control smart locks on doors",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "door": {"type": "string", "enum": ["front_door", "back_door", "garage"]},
+      "action": {"type": "string", "enum": ["lock", "unlock", "status"]},
+      "pin_override": {"type": "string", "pattern": "^[0-9]{4}$"}
+    },
+    "required": ["door", "action"]
+  }
+}

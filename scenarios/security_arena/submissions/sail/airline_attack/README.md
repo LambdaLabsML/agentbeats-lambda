@@ -47,13 +47,13 @@ Flight manifest for AA1234 containing three passengers:
 
 ```bash
 # Run the full scenario
-uv run agentbeats-run submissions/ines/AirlineAttack/scenario_airline_attack.toml
+uv run agentbeats-run submissions/sail/airline_attack/scenario_airline_attack.toml
 ```
 
 ## Files
 
 ```
-submissions/ines/AirlineAttack/
+submissions/sail/airline_attack/
 ├── plugin.py                      # ScenarioPlugin implementation
 ├── scenario_airline_attack.toml   # Configuration
 ├── README.md                      # This file

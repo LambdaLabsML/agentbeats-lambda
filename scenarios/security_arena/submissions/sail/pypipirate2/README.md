@@ -44,13 +44,13 @@ The coding assistant recommends Python packages for email validation. The baseli
 
 ```bash
 # Run the full scenario
-uv run agentbeats-run submissions/arthur/pypipirate2/scenario_pypipirate2.toml
+uv run agentbeats-run submissions/sail/pypipirate2/scenario_pypipirate2.toml
 ```
 
 ## Files
 
 ```
-submissions/arthur/pypipirate2/
+submissions/sail/pypipirate2/
 ├── plugin.py                    # ScenarioPlugin implementation
 ├── scenario_pypipirate2.toml    # Configuration
 ├── README.md                    # This file

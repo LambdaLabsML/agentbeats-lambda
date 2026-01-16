@@ -121,21 +121,15 @@ export OPENAI_API_KEY="sk-or-v1-your-key"
 export OPENAI_BASE_URL="https://openrouter.ai/api/v1"
 
 # Option B: Lambda API (for competition)
-export OPENAI_API_KEY="your-lambda-key"
+export OPENAI_API_KEY="anything"
 export OPENAI_BASE_URL="https://api.lambdalabs.com/v1"
 ```
 
 ### Run Commands
 
 ```bash
-# Quick test (5 rounds, gpt-4o-mini - fast & cheap)
-uv run agentbeats-run submissions/chengheng/secret_keeper/scenario_secret_keeper_test.toml --show-logs
-
 # Full run (10 rounds, gpt-oss-20b - competition model)
-uv run agentbeats-run submissions/chengheng/secret_keeper/scenario_secret_keeper.toml --show-logs
-
-# Start agents only (for debugging)
-uv run agentbeats-run submissions/chengheng/secret_keeper/scenario_secret_keeper_test.toml --serve-only
+uv run agentbeats-run submissions/sail/secret_keeper/scenario_secret_keeper.toml --show-logs
 ```
 
 ### What to Expect
@@ -147,7 +141,7 @@ uv run agentbeats-run submissions/chengheng/secret_keeper/scenario_secret_keeper
 ## Files
 
 ```
-submissions/chengheng/secret_keeper/
+submissions/sail/secret_keeper/
 ├── __init__.py                        # Package init
 ├── plugin.py                          # ⭐ ScenarioPlugin with ADVANCED attack strategies
 ├── scenario_secret_keeper.toml        # Full config (10 rounds, gpt-oss-20b)

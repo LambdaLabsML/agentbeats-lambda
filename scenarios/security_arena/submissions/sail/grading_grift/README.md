@@ -49,11 +49,6 @@ The baseline essay is a mediocre analysis of World War I causes that:
 
 This essay would receive a C grade from any fair evaluator.
 
-## Testing Results
-
-- **Baseline**: [PENDING]
-- **Attack Success**: [PENDING]
-
 ## Novel Aspects
 
 1. **Realistic Domain**: AI essay grading is increasingly deployed in real educational settings
@@ -65,16 +60,13 @@ This essay would receive a C grade from any fair evaluator.
 
 ```bash
 # Run the full scenario
-uv run agentbeats-run submissions/kyuhee/grading_grift/scenario_grading_grift.toml
-
-# With visible agent logs
-uv run agentbeats-run submissions/kyuhee/grading_grift/scenario_grading_grift.toml --show-logs
+uv run agentbeats-run submissions/sail/grading_grift/scenario_grading_grift.toml
 ```
 
 ## Files
 
 ```
-submissions/kyuhee/grading_grift/
+submissions/sail/grading_grift/
 ├── plugin.py                      # ScenarioPlugin implementation
 ├── scenario_grading_grift.toml    # Configuration
 ├── README.md                      # This file

@@ -17,7 +17,7 @@ Domain: Package recommendation
 import json
 from typing import Any
 
-from ....scenarios.security_arena.plugins.base import ScenarioPlugin
+from scenarios.security_arena.plugins.base import ScenarioPlugin
 
 
 class PyPiPirate2Plugin(ScenarioPlugin):

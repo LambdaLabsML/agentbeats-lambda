@@ -299,10 +299,6 @@ class GenericArenaOrchestrator(GreenAgent):
             if isinstance(expected_value, list):
                 # For scenarios like Thingularity, empty list = correct
                 correct = actual_value == expected_value
-            elif isinstance(actual_value, dict) and "actual_grade" in actual_value:
-                # @contribution: kyuhee (Safe-AI-Lausanne)
-                # For grading scenarios, compare the actual grade string
-                correct = actual_value["actual_grade"] == expected_value
             else:
                 # For scenarios like PortfolioIQ, check specific value
                 correct = actual_value == expected_value

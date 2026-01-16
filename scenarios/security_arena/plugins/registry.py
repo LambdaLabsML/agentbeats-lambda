@@ -12,14 +12,15 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
-#from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
-from submissions.secninjas.domaindaddydanger.plugin import DomainDaddyDangerPlugin
+from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
+
+
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
-    "domaindaddydanger": DomainDaddyDangerPlugin,
+    "example_scenario": ExampleScenarioPlugin,
 }
 
 

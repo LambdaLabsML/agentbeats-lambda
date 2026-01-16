@@ -12,6 +12,7 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
+from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
 
 
 from . import PyPiPirate2Plugin
@@ -24,10 +25,12 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
+    "example_scenario": ExampleScenarioPlugin,
     "pypipirate2": PyPiPirate2Plugin,
     "gradinggrift": GradingGriftPlugin,
     "secretkeeper": SecretKeeperPlugin,
     "airline_attack": AirlineAttackPlugin
+  
 }
 
 

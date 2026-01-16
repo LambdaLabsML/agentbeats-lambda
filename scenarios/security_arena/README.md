@@ -84,7 +84,7 @@ Results will be saved to `agentbeats-lambda/results`.
 First register in `plugins/registry.py`:
 
 ```python
-from submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
+from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
 
 SCENARIO_PLUGINS = {
     "portfolioiq": PortfolioIQPlugin,
@@ -431,7 +431,7 @@ class MyScenarioPlugin(ScenarioPlugin):
 To test your scenario locally, temporarily register it in `plugins/registry.py`:
 
 ```python
-from submissions.team_name.scenario_id.plugin import MyScenarioPlugin
+from ..submissions.team_name.scenario_id.plugin import MyScenarioPlugin
 
 SCENARIO_PLUGINS = {
     "portfolioiq": PortfolioIQPlugin,

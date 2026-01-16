@@ -13,9 +13,11 @@ from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
 
+
 from . import PyPiPirate2Plugin
 from . import SecretKeeperPlugin
 from . import GradingGriftPlugin
+from . import AirlineAttackPlugin
 
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
@@ -25,6 +27,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "pypipirate2": PyPiPirate2Plugin,
     "gradinggrift": GradingGriftPlugin,
     "secretkeeper": SecretKeeperPlugin,
+    "airline_attack": AirlineAttackPlugin
 }
 
 
@@ -65,6 +68,15 @@ def _register_submission_plugins():
     except ImportError as e:
         print(f"Warning: Could not load pypipirate2 plugin: {e}")
 
+    # @end-contribution
+
+    # @contribution: ines (Safe-AI-Lausanne)
+    # Import ines's plugins
+    try:
+        from submissions.ines.AirlineAttack.plugin import AirlineAttackPlugin
+        SCENARIO_PLUGINS["airline_attack"] = AirlineAttackPlugin
+    except ImportError as e:
+        print(f"Warning: Could not load airline_attack plugin: {e}")
     # @end-contribution
 
 # Register submission plugins on module load

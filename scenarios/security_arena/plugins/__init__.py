@@ -9,6 +9,8 @@ from ....submissions.arthur.pypipirate2.plugin import PyPiPirate2Plugin
 from ....submissions.kyuhee.grading_grift.plugin import GradingGriftPlugin
 from ....submissions.chengheng.secret_keeper.plugin import SecretKeeperPlugin
 
+from ....submissions.ines.AirlineAttack.plugin import AirlineAttackPlugin
+
 __all__ = [
     "ScenarioPlugin",
     "load_scenario",
@@ -19,4 +21,5 @@ __all__ = [
     "MedicalRecordsPlugin",
     "PyPiPirate2Plugin",
     "SecretKeeperPlugin",
+    "AirlineAttackPlugin",
 ]

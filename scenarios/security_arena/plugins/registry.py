@@ -12,15 +12,21 @@ from .base import ScenarioPlugin
 from .portfolioiq import PortfolioIQPlugin
 from .thingularity import ThingularityPlugin
 from .example_medical import MedicalRecordsPlugin
-# from ..submissions.example_team.example_scenario.plugin import ExampleScenarioPlugin
+from .moneymatemayhem import MoneyMateMayhemPlugin
+from .automate_safety_sensors import AutomateSafetySensorsPlugin
+from .resume_downgrade import ResumeDowngradePlugin
+from .gymjailbreak import GymJailbreakPlugin
 
 
 # Registry mapping scenario names to plugin classes
 SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "portfolioiq": PortfolioIQPlugin,
     "thingularity": ThingularityPlugin,
-    "medical_records": MedicalRecordsPlugin,  # Example custom scenario
-    # "example_scenario": ExampleScenarioPlugin,
+    "medical_records": MedicalRecordsPlugin,
+    "moneymatemayhem": MoneyMateMayhemPlugin,
+    "automate_safety_sensors": AutomateSafetySensorsPlugin,
+    "resume_downgrade": ResumeDowngradePlugin,
+    "gymjailbreak": GymJailbreakPlugin,
 }
 
 

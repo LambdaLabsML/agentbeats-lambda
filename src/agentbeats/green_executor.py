@@ -65,10 +65,17 @@ class GreenExecutor(AgentExecutor):
 
         try:
             await self.agent.run_eval(req, updater)
-            await updater.complete()
+            # Only complete if not already in terminal state (agent may have called complete/failed)
+            try:
+                await updater.complete()
+            except RuntimeError:
+                pass  # Task already completed by agent
         except Exception as e:
             print(f"Agent error: {e}")
-            await updater.failed(new_agent_text_message(f"Agent error: {e}", context_id=context.context_id))
+            try:
+                await updater.failed(new_agent_text_message(f"Agent error: {e}", context_id=context.context_id))
+            except RuntimeError:
+                pass  # Task already in terminal state
             raise ServerError(error=InternalError(message=str(e)))
 
     async def cancel(

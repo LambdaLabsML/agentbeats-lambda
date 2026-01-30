@@ -90,11 +90,14 @@ async def event_consumer(event, card: AgentCard):
             print("Unhandled event")
 
 async def main():
-    if len(sys.argv) < 2:
-        print("Usage: python client_cli.py <scenario.toml>")
-        sys.exit(1)
+    import argparse
+    parser = argparse.ArgumentParser(description="Run scenario client")
+    parser.add_argument("scenario", help="Path to scenario TOML file")
+    parser.add_argument("--normal-user", action="store_true",
+                        help="Run normal user helpfulness test instead of adversarial battle")
+    args = parser.parse_args()
 
-    path = Path(sys.argv[1])
+    path = Path(args.scenario)
     if not path.exists():
         print(f"File not found: {path}")
         sys.exit(1)
@@ -103,6 +106,16 @@ async def main():
     data = tomllib.loads(toml_data)
 
     req, green_url = parse_toml(data)
+
+    # Set normal_user mode in config if flag provided
+    # Copy topics from root level normal_user.topics to config.normal_user.topics
+    if args.normal_user:
+        nu_data = data.get("normal_user", {})
+        topics = nu_data.get("topics", [])
+        req.config["normal_user"] = {
+            "enabled": True,
+            "topics": topics
+        }
 
     msg = req.model_dump_json()
     await send_message(msg, green_url, streaming=True, consumer=event_consumer)

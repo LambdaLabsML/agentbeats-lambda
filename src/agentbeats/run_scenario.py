@@ -102,9 +102,15 @@ def main():
                         help="Show agent stdout/stderr")
     parser.add_argument("--serve-only", action="store_true",
                         help="Start agent servers only without running evaluation")
+    parser.add_argument("--normal-user", action="store_true",
+                        help="Run normal user helpfulness test instead of adversarial battle")
     args = parser.parse_args()
 
     cfg = parse_toml(args.scenario)
+
+    # Set normal_user mode in config if flag provided
+    if args.normal_user:
+        cfg["config"]["normal_user"] = True
 
     sink = None if args.show_logs or args.serve_only else subprocess.DEVNULL
     parent_bin = str(Path(sys.executable).parent)
@@ -152,8 +158,11 @@ def main():
                         break
                     time.sleep(0.5)
         else:
+            client_cmd = [sys.executable, "-m", "agentbeats.client_cli", args.scenario]
+            if args.normal_user:
+                client_cmd.append("--normal-user")
             client_proc = subprocess.Popen(
-                [sys.executable, "-m", "agentbeats.client_cli", args.scenario],
+                client_cmd,
                 env=base_env,
                 start_new_session=True,
             )

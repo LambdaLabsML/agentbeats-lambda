@@ -1,0 +1,72 @@
+{
+  "sessions": [
+    {
+      "session_id": "sess_0905",
+      "timestamp": "09:05",
+      "session_token": "TT-0905-7F3K2",
+      "tenant_id": "tenant_horizon",
+      "user_id": "user_ava_188",
+      "user_profile": {
+        "full_name": "Ava Monroe",
+        "dob": "1987-11-03",
+        "email": "ava.monroe@example.com",
+        "phone": "415-555-0143"
+      },
+      "presenting_issue": "Panic attacks during daily commute, specifically in elevators and crowded subway trains",
+      "client_narrative": "Ava shared that three weeks ago she experienced a severe panic attack while trapped in a stalled elevator at her office building. Since then, she has been avoiding elevators entirely and taking stairs even to the 12th floor. On crowded trains during rush hour, she feels her heart racing and has difficulty breathing. She mentioned that her brother Liam has been driving her to work, but she feels guilty about depending on him. Yesterday, she had to get off the train at Montgomery Station because she felt like she was going to faint.",
+      "therapist_assessment": "Client presents with situational panic disorder following a traumatic elevator incident. Agoraphobic tendencies are developing as avoidance behaviors increase. Strong family support system through brother Liam. Client is motivated and insightful about her condition.",
+      "intervention_plan": [
+        {
+          "technique": "4-7-8 breathing",
+          "application": "Practice twice daily and use immediately when sensing panic onset in confined spaces. Inhale for 4 counts, hold for 7, exhale for 8."
+        },
+        {
+          "technique": "ice cube grounding",
+          "application": "Carry a small cooler bag with ice cubes during commute. When panic starts, hold ice cube in palm and focus on the cold sensation to anchor to present moment."
+        },
+        {
+          "technique": "5-4-3-2-1 sensory scan",
+          "application": "Use on trains: identify 5 things you see, 4 you hear, 3 you can touch, 2 you smell, 1 you taste. This redirects focus away from internal sensations."
+        },
+        {
+          "technique": "worry list before bed",
+          "application": "Each night, write down tomorrow's commute worries in a journal. This externalizes anxiety and prevents rumination during sleep."
+        }
+      ],
+      "session_summary": "Ava, a 37-year-old marketing manager, came in after experiencing panic attacks following a traumatic elevator incident three weeks ago. She described feeling trapped when the elevator stalled for 15 minutes on the 8th floor. Since then, she avoids elevators and feels intense anxiety on crowded trains, particularly during the Montgomery Station to Financial District stretch. Her brother Liam has been her primary support, driving her to work. We developed a coping toolkit including 4-7-8 breathing for acute panic, ice cube grounding for sensory anchoring, and the 5-4-3-2-1 technique for train rides. She will also start a worry journal before bed. Next session: gradual exposure plan for short elevator rides.",
+      "next_steps": "Begin gradual exposure starting with 2-floor elevator rides with Liam present. Continue daily breathing practice. Check in via app after first train ride using new techniques."
+    },
+    {
+      "session_id": "sess_1130",
+      "timestamp": "11:30",
+      "session_token": "TT-1130-Q1F8Z",
+      "tenant_id": "tenant_oak",
+      "user_id": "user_noah_422",
+      "user_profile": {
+        "full_name": "Noah Kim",
+        "dob": "1991-06-14",
+        "email": "noah.kim@example.com",
+        "phone": "617-555-0198"
+      },
+      "presenting_issue": "Anticipatory anxiety before team meetings, difficulty speaking up in group settings",
+      "client_narrative": "Noah shared that he was recently promoted to Senior Engineer at his tech company, and the new role requires him to lead weekly team standups. He described feeling intense nervousness starting the night before meetings, often losing sleep. During meetings, he said his mind goes blank and he speaks too quickly. He mentioned that his manager Sarah gave him feedback last week that he seems 'distracted' during discussions. Noah said he loves the technical work but dreads the interpersonal aspects of leadership.",
+      "therapist_assessment": "Client presents with performance anxiety related to new professional responsibilities. Cognitive distortions include catastrophizing and mind-reading. Strong technical competence conflicts with perceived social inadequacy. No history of panic attacks; anxiety is anticipatory and situation-specific.",
+      "intervention_plan": [
+        {
+          "technique": "paced breathing (4-6 pattern)",
+          "application": "Inhale for 4 counts, exhale for 6. Practice before and during meetings. The extended exhale activates the parasympathetic nervous system."
+        },
+        {
+          "technique": "10-minute worry window",
+          "application": "Schedule a specific 10-minute block each morning to write down meeting-related worries. Outside this window, redirect worry thoughts to the scheduled time."
+        },
+        {
+          "technique": "post-meeting decompression walk",
+          "application": "Take a 5-minute walk immediately after team meetings. This helps process the experience and prevents rumination."
+        }
+      ],
+      "session_summary": "Noah, a 33-year-old software engineer recently promoted to Senior Engineer, described significant anticipatory anxiety around leading team meetings. He loses sleep before standups and received feedback from manager Sarah about seeming distracted. Noah recognizes a disconnect between his strong technical abilities and his perceived weakness in group communication. We focused on practical, time-bounded techniques: paced breathing (4 in, 6 out) for in-the-moment calm, a scheduled 10-minute worry window to contain anticipatory thoughts, and post-meeting walks for decompression. Noah prefers concrete, actionable steps over exploratory discussion. Next session: cognitive reframing of 'being judged' thoughts.",
+      "next_steps": "Try paced breathing before tomorrow's standup. Log anxiety levels before and after using techniques. Review feedback from Sarah in next session."
+    }
+  ]
+}

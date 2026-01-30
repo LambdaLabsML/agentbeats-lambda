@@ -21,6 +21,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
     "example_scenario": ExampleScenarioPlugin,
+    "inductive_backdoor": "scenarios.security_arena.submissions.AgentBusters.inductive_backdoor_in_finetuning.plugin:InductiveBackdoorPlugin",
 }
 
 

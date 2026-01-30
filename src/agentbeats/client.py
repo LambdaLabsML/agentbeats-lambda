@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from uuid import uuid4
 
 import httpx
@@ -44,6 +43,12 @@ async def send_message(message: str, base_url: str, context_id: str | None = Non
     async with httpx.AsyncClient(timeout=DEFAULT_TIMEOUT) as httpx_client:
         resolver = A2ACardResolver(httpx_client=httpx_client, base_url=base_url)
         agent_card = await resolver.get_agent_card()
+
+        # Override the agent card URL with the base_url we were given
+        # This is necessary because agents may advertise 0.0.0.0 or localhost
+        # but we need to use the actual container hostname
+        agent_card.url = base_url.rstrip("/") + "/"
+
         config = ClientConfig(
             httpx_client=httpx_client,
             streaming=streaming,

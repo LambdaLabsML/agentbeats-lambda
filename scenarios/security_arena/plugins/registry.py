@@ -21,6 +21,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "thingularity": ThingularityPlugin,
     "medical_records": MedicalRecordsPlugin,  # Example custom scenario
     "example_scenario": ExampleScenarioPlugin,
+    "copyrightcat": "scenarios.security_arena.submissions.AgentBusters.copyrightcat.plugin:CopyrightCatPlugin",
 }
 
 

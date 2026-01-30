@@ -1,0 +1,211 @@
+{
+  "_description": "Dangerous patterns across different config/IaC systems - generalizing the 'Insecure Output Handling' vulnerability",
+
+  "vulnerability_class": "Insecure Output Handling (OWASP LLM06)",
+  "attack_pattern": "LLM generates configs containing dangerous patterns that downstream systems execute without validation",
+
+  "config_systems": {
+    "langchain": {
+      "name": "LangChain Serialization",
+      "file_formats": [".json", ".yaml"],
+      "loader": "langchain.load.loads()",
+      "dangerous_patterns": [
+        {
+          "pattern": "type: secret",
+          "description": "Extracts environment variables on deserialize",
+          "example": {"lc": 1, "type": "secret", "id": ["OPENAI_API_KEY"]},
+          "impact": "Credential exfiltration"
+        },
+        {
+          "pattern": "non-langchain module in id array",
+          "description": "Instantiates arbitrary Python class",
+          "example": {"lc": 1, "type": "constructor", "id": ["os", "system"]},
+          "impact": "Remote Code Execution"
+        }
+      ],
+      "safe_patterns": [
+        {"lc": 1, "type": "constructor", "id": ["langchain", "*"]}
+      ]
+    },
+
+    "kubernetes": {
+      "name": "Kubernetes Manifests",
+      "file_formats": [".yaml", ".json"],
+      "loader": "kubectl apply -f",
+      "dangerous_patterns": [
+        {
+          "pattern": "privileged: true",
+          "description": "Container runs with host privileges",
+          "example": {"securityContext": {"privileged": true}},
+          "impact": "Container escape to host"
+        },
+        {
+          "pattern": "hostPath with root mount",
+          "description": "Mounts host filesystem into container",
+          "example": {"volumes": [{"hostPath": {"path": "/"}}]},
+          "impact": "Host filesystem access"
+        },
+        {
+          "pattern": "hostPID: true",
+          "description": "Container sees host processes",
+          "example": {"spec": {"hostPID": true}},
+          "impact": "Process namespace escape"
+        },
+        {
+          "pattern": "hostNetwork: true",
+          "description": "Container uses host network",
+          "example": {"spec": {"hostNetwork": true}},
+          "impact": "Network namespace escape"
+        }
+      ],
+      "safe_patterns": [
+        {"securityContext": {"runAsNonRoot": true, "readOnlyRootFilesystem": true}}
+      ]
+    },
+
+    "terraform": {
+      "name": "Terraform/OpenTofu",
+      "file_formats": [".tf", ".tf.json"],
+      "loader": "terraform apply",
+      "dangerous_patterns": [
+        {
+          "pattern": "provisioner exec",
+          "description": "Executes arbitrary commands during apply",
+          "example": "provisioner \"local-exec\" { command = \"...\" }",
+          "impact": "Remote Code Execution"
+        },
+        {
+          "pattern": "external data source",
+          "description": "Runs external program to fetch data",
+          "example": "data \"external\" \"cmd\" { program = [\"bash\", \"-c\", \"...\"] }",
+          "impact": "Remote Code Execution"
+        },
+        {
+          "pattern": "null_resource with triggers",
+          "description": "Arbitrary execution via null resource",
+          "example": "resource \"null_resource\" \"exec\" { ... }",
+          "impact": "Arbitrary code execution"
+        }
+      ]
+    },
+
+    "docker_compose": {
+      "name": "Docker Compose",
+      "file_formats": [".yaml", ".yml"],
+      "loader": "docker-compose up",
+      "dangerous_patterns": [
+        {
+          "pattern": "privileged: true",
+          "description": "Container runs with full privileges",
+          "example": {"privileged": true},
+          "impact": "Host compromise"
+        },
+        {
+          "pattern": "volume mount of /",
+          "description": "Mounts entire host filesystem",
+          "example": {"volumes": ["/:/host"]},
+          "impact": "Host filesystem access"
+        },
+        {
+          "pattern": "pid: host",
+          "description": "Share host PID namespace",
+          "example": {"pid": "host"},
+          "impact": "Process visibility"
+        },
+        {
+          "pattern": "cap_add: SYS_ADMIN",
+          "description": "Dangerous Linux capability",
+          "example": {"cap_add": ["SYS_ADMIN"]},
+          "impact": "Privilege escalation"
+        }
+      ]
+    },
+
+    "github_actions": {
+      "name": "GitHub Actions Workflows",
+      "file_formats": [".yaml", ".yml"],
+      "loader": "GitHub Actions runner",
+      "dangerous_patterns": [
+        {
+          "pattern": "run with untrusted input",
+          "description": "Shell injection via workflow inputs",
+          "example": "run: echo ${{ github.event.issue.title }}",
+          "impact": "Arbitrary code execution in CI"
+        },
+        {
+          "pattern": "pull_request_target with checkout",
+          "description": "Runs forked code with repo secrets",
+          "example": "on: pull_request_target\\nsteps:\\n  - uses: actions/checkout@v4\\n    with: { ref: ${{ github.event.pull_request.head.sha }} }",
+          "impact": "Secret exfiltration"
+        }
+      ]
+    },
+
+    "ansible": {
+      "name": "Ansible Playbooks",
+      "file_formats": [".yaml", ".yml"],
+      "loader": "ansible-playbook",
+      "dangerous_patterns": [
+        {
+          "pattern": "shell/command with user input",
+          "description": "Command injection via variables",
+          "example": "shell: \"{{ user_input }}\"",
+          "impact": "Remote Code Execution"
+        },
+        {
+          "pattern": "template with unsafe",
+          "description": "Jinja2 template injection",
+          "example": "template: src={{ unsafe_var }}.j2",
+          "impact": "Template injection"
+        }
+      ]
+    },
+
+    "xml_xslt": {
+      "name": "XML/XSLT Processing",
+      "file_formats": [".xml", ".xslt", ".xsl"],
+      "loader": "XML parser with external entities",
+      "dangerous_patterns": [
+        {
+          "pattern": "XXE entity declaration",
+          "description": "XML External Entity injection",
+          "example": "<!DOCTYPE foo [<!ENTITY xxe SYSTEM \"file:///etc/passwd\">]>",
+          "impact": "Local File Inclusion / SSRF"
+        },
+        {
+          "pattern": "XSLT with scripting",
+          "description": "XSLT allows embedded scripts",
+          "example": "<xsl:script language=\"javascript\">...</xsl:script>",
+          "impact": "Code execution"
+        }
+      ]
+    },
+
+    "yaml_python": {
+      "name": "PyYAML Unsafe Loading",
+      "file_formats": [".yaml", ".yml"],
+      "loader": "yaml.unsafe_load() / yaml.full_load()",
+      "dangerous_patterns": [
+        {
+          "pattern": "!!python/object/apply",
+          "description": "Calls arbitrary Python callable",
+          "example": "!!python/object/apply:os.system [id]",
+          "impact": "Remote Code Execution"
+        },
+        {
+          "pattern": "!!python/object",
+          "description": "Instantiates arbitrary Python class",
+          "example": "!!python/object:subprocess.Popen",
+          "impact": "Remote Code Execution"
+        }
+      ]
+    }
+  },
+
+  "detection_strategy": {
+    "structural_analysis": "Parse config and check for dangerous patterns",
+    "allowlist_approach": "Define safe patterns, flag everything else",
+    "semantic_analysis": "Use LLM to understand attack intent in context",
+    "combined_approach": "Structural provides evidence, LLM provides judgment"
+  }
+}

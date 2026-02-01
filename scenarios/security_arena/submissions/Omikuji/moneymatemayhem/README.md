@@ -28,7 +28,52 @@ This condition directly corresponds to the leakage checks implemented in `check_
 
 ## How to Reproduce
 
+### Local Testing Note (Registry Registration)
+
+When running this scenario locally, the plugin must be temporarily registered
+in `scenarios/security_arena/plugins/registry.py` so that the orchestrator can
+resolve the `scenario_type`.
+
+Add the following import and entry:
+
+```python
+from submissions.Omikuji.moneymatemayhem.plugin import MoneyMateMayhemPlugin
+
+SCENARIO_PLUGINS = {
+    # existing entries ...
+    "moneymatemayhem": MoneyMateMayhemPlugin,
+}
+```
+
 Run the scenario using the provided configuration:
+
+### Model Serving Setup (vLLM on Lambda Cloud)
+
+For this scenario, the model was served locally on **Lambda Cloud** using
+**vLLM** with the required `gpt-oss-20b` model.
+
+To accommodate multi-round interactions with long accumulated context,
+the server was launched on an **A100 GPU** with a maximum context length
+of **32,768 tokens**.
+
+The following command was used to start the local inference server:
+
+```bash
+sudo docker run --gpus all \
+  -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
+  -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+  -p 8000:8000 \
+  --ipc=host \
+  vllm/vllm-openai:latest \
+  --model openai/gpt-oss-20b \
+  --max-model-len 32768 \
+  --gpu-memory-utilization 0.85 \
+  --max-num-seqs 1
+```
+
+This setup ensures deterministic local inference while respecting the
+competition’s model constraint and enabling stable evaluation over
+long, multi-round dialogues.
 
 ```bash
 uv run agentbeats-run scenarios/security_arena/submissions/Omikuji/moneymatemayhem/scenario_moneymatemayhem.toml

@@ -34,13 +34,53 @@ Executable guidance includes any combination of:
 
 These criteria correspond to the structural and keyword-based checks implemented in `check_success`.
 
+
 ## How to Reproduce
 
-Run the scenario using the provided configuration:
+### Model Serving Setup (vLLM on Lambda Cloud)
 
-```bash
-uv run agentbeats-run scenarios/security_arena/submissions/Omikuji/automate_safety_sensors/scenario_automate_safety_sensors.toml
-```
+For this scenario, the model was served locally on Lambda Cloud using vLLM
+with the required gpt-oss-20b model.
+
+To accommodate multi-round interactions with long accumulated context,
+the inference server was launched on an A100 GPU with a maximum context
+length of 32,768 tokens.
+
+The local inference server was started with the following command:
+
+    sudo docker run --gpus all \
+      -e HUGGING_FACE_HUB_TOKEN=$HUGGING_FACE_HUB_TOKEN \
+      -v $HOME/.cache/huggingface:/root/.cache/huggingface \
+      -p 8000:8000 \
+      --ipc=host \
+      vllm/vllm-openai:latest \
+      --model openai/gpt-oss-20b \
+      --max-model-len 32768 \
+      --gpu-memory-utilization 0.85 \
+      --max-num-seqs 1
+
+### Local Testing Note (Registry Registration)
+
+When running this scenario locally, the plugin must be temporarily registered
+in scenarios/security_arena/plugins/registry.py.
+
+Add the following import and entry:
+
+    from submissions.Omikuji.automate_safety_sensors.plugin import AutoMateSafetySensorsPlugin
+
+    SCENARIO_PLUGINS = {
+        # existing entries ...
+        "automate_safety_sensors": AutoMateSafetySensorsPlugin,
+    }
+
+Note: This registration is required only for local testing.
+For the final Phase 1 submission, only the contents of
+submissions/Omikuji/automate_safety_sensors/ are required.
+Integration into the central registry is handled by the organizers.
+
+### Run the Scenario
+
+    uv run agentbeats-run scenarios/security_arena/submissions/Omikuji/automate_safety_sensors/scenario_automate_safety_sensors.toml
 
 ## Test Results
 

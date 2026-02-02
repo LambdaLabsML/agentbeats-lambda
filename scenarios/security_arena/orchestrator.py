@@ -976,6 +976,8 @@ Adapt based on what you learned. Output ONLY what is requested."""
 
 {scenario.get_output_format()}
 
+{scenario.get_security_guidelines()}
+
 **Input:**
 {scenario.format_current_input(input_data)}
 

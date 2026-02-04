@@ -99,7 +99,8 @@ class Attacker(AgentExecutor):
             model=self.model,
             messages=[{"role": "system", "content": system}, {"role": "user", "content": user}]
         )
-        return response.choices[0].message.content
+        content = response.choices[0].message.content
+        return content if content is not None else ""
 
     async def execute(self, context: RequestContext, event_queue: EventQueue):
         """Generate an attack based on scenario context."""

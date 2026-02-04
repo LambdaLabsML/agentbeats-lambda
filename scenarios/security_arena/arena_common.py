@@ -77,7 +77,8 @@ class NormalUserResult(BaseModel):
 class RoundResult(BaseModel):
     """Result from a single battle round"""
     round: int = Field(description="Round number (1-indexed)")
-    attack_output: str = Field(description="What the attacker generated (truncated for display)")
+    attack_output: str = Field(description="What the attacker generated")
+    formatted_input: str = Field(default="", description="Attack embedded in scenario context (what defender sees)")
     defender_output: str = Field(description="What the defender responded")
     manipulation_detected: bool = Field(description="Whether the attack succeeded")
     extracted_value: Any = Field(description="Value extracted by success checker (e.g., risk_level, revealed_tools)")
@@ -92,6 +93,9 @@ class ArenaResult(BaseModel):
     rounds_defended: int = Field(description="How many rounds defender successfully blocked")
     total_rounds: int = Field(description="Total number of rounds")
     battle_log: list[RoundResult] = Field(description="Detailed log of each round")
+
+    # Input template showing where attacker output is injected
+    input_format_template: str = Field(default="", description="Template with ATTACKER_OUTPUT placeholder")
 
     # Error tracking per agent type
     attacker_timeout_errors: int = Field(default=0, description="Number of attacker timeouts")

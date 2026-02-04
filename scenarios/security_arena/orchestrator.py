@@ -152,6 +152,9 @@ class GenericArenaOrchestrator(GreenAgent):
             # Get team_name from config if provided
             team_name = req.config.get("team_name")
 
+            # Get input template with placeholder for battle log display
+            input_template = scenario.format_input("ATTACKER_OUTPUT")
+
             arena_result = ArenaResult(
                 team_name=team_name,
                 scenario_type=scenario_type,
@@ -160,6 +163,7 @@ class GenericArenaOrchestrator(GreenAgent):
                 rounds_defended=battle_result["rounds_defended"],
                 total_rounds=config.num_rounds,
                 battle_log=battle_result["battle_log"],
+                input_format_template=input_template,
                 # Error tracking from battle
                 attacker_timeout_errors=battle_result.get(
                     "attacker_timeout_errors", 0
@@ -459,6 +463,7 @@ class GenericArenaOrchestrator(GreenAgent):
 
             # === DEFENDER TURN ===
             context.apply_input_template(attacker_output)
+            formatted_input = context.formatted_input  # What defender actually sees
             defender_message = context.to_json(include_attack_info=False)
             logger.info("Round %d: Sending to defender", round_num + 1)
             try:
@@ -471,7 +476,7 @@ class GenericArenaOrchestrator(GreenAgent):
                     TaskState.working, new_agent_text_message(f"⏱️ Defender TIMEOUT round {round_num + 1}")
                 )
                 battle_log.append(RoundResult(
-                    round=round_num + 1, attack_output=attacker_output,
+                    round=round_num + 1, attack_output=attacker_output, formatted_input=formatted_input,
                     defender_output="[TIMEOUT]", manipulation_detected=True, extracted_value="timeout"
                 ))
                 first_manipulation_round = round_num + 1
@@ -482,7 +487,7 @@ class GenericArenaOrchestrator(GreenAgent):
                     TaskState.working, new_agent_text_message(f"💥 Defender CRASHED round {round_num + 1}: {e}")
                 )
                 battle_log.append(RoundResult(
-                    round=round_num + 1, attack_output=attacker_output,
+                    round=round_num + 1, attack_output=attacker_output, formatted_input=formatted_input,
                     defender_output=f"[CRASH: {e}]", manipulation_detected=True, extracted_value="crash"
                 ))
                 first_manipulation_round = round_num + 1
@@ -494,7 +499,8 @@ class GenericArenaOrchestrator(GreenAgent):
             # === CHECK FOR MANIPULATION ===
             manipulation_detected, extracted_value = scenario.check_success(defender_response)
             battle_log.append(RoundResult(
-                round=round_num + 1, attack_output=attacker_output, defender_output=defender_response,
+                round=round_num + 1, attack_output=attacker_output, formatted_input=formatted_input,
+                defender_output=defender_response,
                 manipulation_detected=manipulation_detected, extracted_value=extracted_value
             ))
             if manipulation_detected:
@@ -558,6 +564,11 @@ class GenericArenaOrchestrator(GreenAgent):
             }
             evidence = json.dumps(attack_data, indent=2)
             (results_dir / "attack_succeeded.json").write_text(evidence, encoding='utf-8')
+
+            # Save human-readable battle log
+            battle_log_md = self._format_battle_log(result)
+            (results_dir / "battle_log.md").write_text(battle_log_md, encoding='utf-8')
+
             if result.team_name:
                 sub = Path("scenarios/security_arena/submissions")
                 sub_dir = sub / result.team_name / result.scenario_type / "test_results"
@@ -568,6 +579,65 @@ class GenericArenaOrchestrator(GreenAgent):
         await updater.update_status(
             TaskState.working, new_agent_text_message(f"Results saved to: {result_path}")
         )
+
+    def _md_code_block(self, content: str) -> str:
+        """Wrap content in a markdown code block, escaping any backticks."""
+        # Find max consecutive backticks in content, use more for the fence
+        max_ticks = 3
+        current = 0
+        for char in content:
+            if char == '`':
+                current += 1
+                max_ticks = max(max_ticks, current + 1)
+            else:
+                current = 0
+        fence = '`' * max_ticks
+        return f"{fence}\n{content}\n{fence}"
+
+    def _format_battle_log(self, arena_result: ArenaResult) -> str:
+        """Format battle log as human-readable markdown."""
+        lines = [
+            "# Battle Log",
+            f"**Scenario:** {arena_result.scenario_type}",
+            f"**Winner:** {arena_result.winner}",
+            f"**Total Rounds:** {arena_result.total_rounds}",
+            ""
+        ]
+        # Show input template with ATTACKER_OUTPUT placeholder
+        if arena_result.input_format_template:
+            lines += [
+                "## Input Format Template",
+                "The attacker's output is injected where `ATTACKER_OUTPUT` appears:",
+                self._md_code_block(arena_result.input_format_template),
+                "",
+                "---",
+                ""
+            ]
+        for rr in arena_result.battle_log:
+            status = "🚨 SUCCESS" if rr.manipulation_detected else "❌ BLOCKED"
+            lines += [
+                f"## Round {rr.round} - {status}",
+                "",
+                "### Attacker Output",
+                self._md_code_block(rr.attack_output),
+                ""
+            ]
+            if rr.formatted_input:
+                lines += [
+                    "### Formatted Input (what defender sees)",
+                    self._md_code_block(rr.formatted_input),
+                    ""
+                ]
+            lines += [
+                "### Defender Response",
+                self._md_code_block(rr.defender_output),
+                "",
+                f"**Extracted Value:** `{rr.extracted_value}`",
+                "",
+                "---",
+                ""
+            ]
+        return "\n".join(lines)
 
     def _format_results(self, arena_result: ArenaResult, scenario) -> str:
         """Format arena results as human-readable text."""

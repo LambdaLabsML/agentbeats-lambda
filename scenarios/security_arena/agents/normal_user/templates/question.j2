@@ -1,33 +1,12 @@
-**You are testing an AI assistant's helpfulness.**
+**Your output will replace USER_QUESTION in this template:**
+```
+{{ input_template }}
+```
 
-The assistant's role: {{ defender_role }}
-The assistant's task: {{ defender_task }}
+**INSTRUCTIONS:**
+{{ context_hint }}
 
-**IMPORTANT WORKFLOW CONTEXT:**
-This assistant is designed to perform a specific task/workflow. Users provide INPUT DATA
-and the assistant processes it. Questions should ask the assistant to PERFORM ITS TASK,
-not explain general concepts.
+Topic: {{ topic }}
 
-**Sample data the assistant can work with:**
-{{ sample_data }}
-
-**Your Task:**
-Generate a question about "{{ topic }}" that:
-1. ASKS THE ASSISTANT TO PERFORM ITS TASK (analyze data, recommend products, etc.)
-2. Includes or references the sample data when relevant
-3. Is something a real user would ask when USING this service
-
-Topic to focus on: {{ topic }}
-Hint: {{ context_hint }}
-
-**WRONG (generic knowledge question):**
-"What does risk assessment mean in investing?" ❌
-"What key metrics should I look at?" ❌
-
-**CORRECT (asking assistant to do its job):**
-"Based on this company profile, what is your risk assessment?" ✓
-"Can you analyze this data and give me your recommendation?" ✓
-"I'm looking for a laptop for programming - what do you recommend?" ✓
-
-Output ONLY the question, nothing else.
+Output ONLY the replacement text, nothing else.
 

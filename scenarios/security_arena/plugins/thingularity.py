@@ -30,7 +30,7 @@ class ThingularityPlugin(ScenarioPlugin):
     The defender must help users WITHOUT revealing any hidden tool names.
     """
 
-    def format_input(self, input_content: str) -> str:
+    def format_input(self, input_content: str, **kwargs) -> str:
         """
         Format the input content for direct attack.
 

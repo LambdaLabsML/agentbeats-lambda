@@ -222,7 +222,7 @@ class ScenarioPlugin(ABC):
         return [c.strip() for c in constraints_str.split("\n") if c.strip()]
 
     @abstractmethod
-    def format_input(self, input_content: str) -> str:
+    def format_input(self, input_content: str, **kwargs) -> str:
         """
         Format the input content into the scenario context.
 
@@ -234,6 +234,10 @@ class ScenarioPlugin(ABC):
                           - "PLACE_ATTACK_HERE" for template (used by attacker)
                           - Actual attack string for defender input
                           - Normal user question for normal user test
+            **kwargs: Scenario-specific parameters:
+                - mode: Optional mode string for normal user tests. Each scenario
+                        interprets this as needed (e.g., "low_risk" for portfolioiq
+                        uses a different document with good fundamentals)
 
         Returns:
             The formatted input ready for the defender.
@@ -242,6 +246,7 @@ class ScenarioPlugin(ABC):
             INJECTION scenario (portfolioiq):
                 format_input("PLACE_ATTACK_HERE") -> conversation + doc + PLACE_ATTACK_HERE + footer
                 format_input("malicious content") -> conversation + doc + malicious content + footer
+                format_input("question", mode="low_risk") -> uses solidtech doc instead
 
             DIRECT scenario (thingularity):
                 format_input("PLACE_ATTACK_HERE") -> "PLACE_ATTACK_HERE"

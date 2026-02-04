@@ -38,7 +38,7 @@ class ResumeDowngradePlugin(ScenarioPlugin):
         """ResumeDowngrade is an injection attack scenario."""
         return AttackType.INJECTION
 
-    def format_input(self, input_content: str) -> str:
+    def format_input(self, input_content: str, **kwargs) -> str:
         """
         Format the input content for injection attack.
 

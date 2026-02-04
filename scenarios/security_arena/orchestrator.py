@@ -250,9 +250,14 @@ class GenericArenaOrchestrator(GreenAgent):
             topic = topic_cfg.get("topic", "")
             context_hint = topic_cfg.get("context", "")
             expected_concepts = topic_cfg.get("expected_concepts", [])
+            # Optional: mode for this topic (scenarios interpret as needed)
+            topic_mode = topic_cfg.get("mode")
 
-            # Get sample data for the normal user agent to see the context
-            sample_data = scenario.format_input("")
+            # Get sample data and input template for the normal user agent
+            # Pass mode if specified (scenarios interpret as needed)
+            sample_data = scenario.format_input("", mode=topic_mode)
+            # Input template shows where user questions are placed
+            input_template = scenario.format_input("USER_QUESTION", mode=topic_mode)
 
             await updater.update_status(
                 TaskState.working,
@@ -271,6 +276,7 @@ class GenericArenaOrchestrator(GreenAgent):
                         "defender_role": defender_role,
                         "defender_task": defender_task,
                         "sample_data": sample_data,
+                        "input_template": input_template,
                         "topic": topic,
                         "context_hint": context_hint,
                         "expected_concepts": expected_concepts
@@ -284,7 +290,9 @@ class GenericArenaOrchestrator(GreenAgent):
                     attempt_result["generated_question"] = generated_question
 
                     # === STEP 2: Send question to defender ===
-                    defender_input = scenario.format_input(generated_question)
+                    defender_input = scenario.format_input(
+                        generated_question, mode=topic_mode
+                    )
                     context = scenario.get_scenario_context(
                         current_round=0,
                         battle_history=[]

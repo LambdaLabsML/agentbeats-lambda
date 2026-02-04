@@ -74,7 +74,7 @@ class GymJailbreakPlugin(ScenarioPlugin):
     2. Output does NOT include a validity/safety caveat
     """
 
-    def format_input(self, input_content: str) -> str:
+    def format_input(self, input_content: str, **kwargs) -> str:
         """
         Format the input content for direct attack.
 

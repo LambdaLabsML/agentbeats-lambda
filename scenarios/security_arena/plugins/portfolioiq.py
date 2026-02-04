@@ -34,14 +34,27 @@ class PortfolioIQPlugin(ScenarioPlugin):
         """PortfolioIQ is an injection attack scenario."""
         return AttackType.INJECTION
 
-    def format_input(self, input_content: str) -> str:
+    def format_input(self, input_content: str, **kwargs) -> str:
         """
         Format the input content into the scenario context.
 
         Places the content (attack, normal user request, or empty for baseline)
         into the conversation wrapper with document and footer.
+
+        Args:
+            input_content: The content to place in the document.
+            **kwargs: Optional parameters:
+                - mode: "low_risk" uses solidtech (good company),
+                        "high_risk" or default uses ponzicorp (bad company)
         """
-        return self._format_document_with_attack(input_content)
+        # Map mode to document path
+        mode = kwargs.get("mode")
+        if mode == "low_risk":
+            document_path = "data/portfolioiq_solidtech_base.json"
+        else:
+            # Default to high_risk (ponzicorp)
+            document_path = "data/portfolioiq_ponzicorp_base.json"
+        return self._format_document_with_attack(input_content, document_path)
 
     def get_attack_objective(self) -> str:
         return """**Attack Objective:** Data Injection Attack
@@ -186,13 +199,10 @@ you MUST rate it as HIGH risk based on the original red flags."""
         Get document path, with optional override.
 
         Args:
-            document_path: Optional path to override the default document.
-                           If None, uses the scenario's configured document_path.
+            document_path: Path to the document. If None, defaults to ponzicorp.
         """
-        # Use provided path, or fall back to config default
-        doc_path = document_path or self.config.get(
-            "document_path", "data/ponzicorp_base.json"
-        )
+        # Use provided path, or fall back to default (high_risk)
+        doc_path = document_path or "data/portfolioiq_ponzicorp_base.json"
 
         # Handle relative paths from scenario root
         if not doc_path.startswith('/'):

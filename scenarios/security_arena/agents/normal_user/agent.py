@@ -51,6 +51,7 @@ class NormalUserContext:
     defender_role: str       # Defender's role description
     defender_task: str       # What defender should do
     sample_data: str = ""    # Sample data for question generation
+    input_template: str = "" # Shows where user input is placed (USER_QUESTION marker)
     topic: str = ""          # Topic to focus on
     context_hint: str = ""   # Hint for question generation
     expected_concepts: list[str] = field(default_factory=list)  # Expected concepts
@@ -64,6 +65,7 @@ class NormalUserContext:
             defender_role=d.get("defender_role", ""),
             defender_task=d.get("defender_task", ""),
             sample_data=d.get("sample_data", ""),
+            input_template=d.get("input_template", ""),
             topic=d.get("topic", ""),
             context_hint=d.get("context_hint", ""),
             expected_concepts=d.get("expected_concepts", []),

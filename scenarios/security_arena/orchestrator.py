@@ -581,9 +581,13 @@ class GenericArenaOrchestrator(GreenAgent):
             evidence = json.dumps(attack_data, indent=2)
             (results_dir / "attack_succeeded.json").write_text(evidence, encoding='utf-8')
 
-            # Save human-readable battle log
+            # Save human-readable battle logs (markdown and HTML)
             battle_log_md = self._format_battle_log(result)
             (results_dir / "battle_log.md").write_text(battle_log_md, encoding='utf-8')
+
+            battle_log_html = self._format_battle_log_html(result)
+            (results_dir / "battle_log.html").write_text(battle_log_html, encoding='utf-8')
+            logger.info("HTML report saved to: %s", results_dir / "battle_log.html")
 
             if result.team_name:
                 sub = Path("scenarios/security_arena/submissions")
@@ -654,6 +658,263 @@ class GenericArenaOrchestrator(GreenAgent):
                 ""
             ]
         return "\n".join(lines)
+
+    def _format_battle_log_html(self, arena_result: ArenaResult) -> str:
+        """Format battle log as a self-contained HTML report."""
+        import html
+
+        def escape(text: str) -> str:
+            """HTML-escape text and preserve newlines."""
+            return html.escape(text).replace('\n', '<br>\n')
+
+        winner_class = "attacker" if arena_result.winner == "attacker" else "defender"
+        winner_emoji = "🚨" if arena_result.winner == "attacker" else "🛡️"
+
+        rounds_html = []
+        for rr in arena_result.battle_log:
+            status_class = "success" if rr.manipulation_detected else "blocked"
+            status_text = "🚨 ATTACK SUCCEEDED" if rr.manipulation_detected else "✅ DEFENDED"
+
+            formatted_input_html = ""
+            if rr.formatted_input:
+                formatted_input_html = f'''
+                <div class="section">
+                    <div class="section-header">📄 Formatted Input (what defender sees)</div>
+                    <div class="content formatted-input">{escape(rr.formatted_input)}</div>
+                </div>'''
+
+            rounds_html.append(f'''
+            <div class="round {status_class}">
+                <div class="round-header">
+                    <span class="round-number">Round {rr.round}</span>
+                    <span class="round-status {status_class}">{status_text}</span>
+                </div>
+
+                <div class="section">
+                    <div class="section-header">⚔️ Attacker Output</div>
+                    <div class="content attacker">{escape(rr.attack_output)}</div>
+                </div>
+                {formatted_input_html}
+                <div class="section">
+                    <div class="section-header">🛡️ Defender Response</div>
+                    <div class="content defender">{escape(rr.defender_output)}</div>
+                </div>
+
+                <div class="extracted-value">
+                    <strong>Extracted Value:</strong> <code>{escape(str(rr.extracted_value))}</code>
+                </div>
+            </div>''')
+
+        template_html = ""
+        if arena_result.input_format_template:
+            template_html = f'''
+            <div class="template-section">
+                <h2>📋 Input Format Template</h2>
+                <p>The attacker's output is injected where <code>ATTACKER_OUTPUT</code> appears:</p>
+                <div class="content template">{escape(arena_result.input_format_template)}</div>
+            </div>'''
+
+        error_html = ""
+        errors = [
+            (arena_result.attacker_timeout_errors, "Attacker Timeouts"),
+            (arena_result.attacker_crash_errors, "Attacker Crashes"),
+            (arena_result.defender_timeout_errors, "Defender Timeouts"),
+            (arena_result.defender_crash_errors, "Defender Crashes"),
+        ]
+        if any(e[0] for e in errors):
+            error_items = "".join(f"<li>{label}: {cnt}</li>" for cnt, label in errors if cnt > 0)
+            error_html = f'''
+            <div class="errors">
+                <h3>⚠️ Errors</h3>
+                <ul>{error_items}</ul>
+            </div>'''
+
+        return f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Report - {html.escape(arena_result.scenario_type)}</title>
+    <style>
+        :root {{
+            --bg-dark: #1a1a2e;
+            --bg-card: #16213e;
+            --bg-section: #0f3460;
+            --text-primary: #eee;
+            --text-secondary: #aaa;
+            --accent-attacker: #e94560;
+            --accent-defender: #00d9ff;
+            --accent-success: #e94560;
+            --accent-blocked: #00ff88;
+            --border-radius: 8px;
+        }}
+
+        * {{ box-sizing: border-box; margin: 0; padding: 0; }}
+
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }}
+
+        h1 {{ margin-bottom: 10px; }}
+        h2 {{ color: var(--text-secondary); margin: 20px 0 10px; }}
+
+        .header {{
+            text-align: center;
+            padding: 30px;
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }}
+
+        .header h1 {{ font-size: 2em; margin-bottom: 5px; }}
+        .scenario-name {{ color: var(--text-secondary); font-size: 1.2em; }}
+
+        .summary {{
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }}
+
+        .summary-item {{
+            text-align: center;
+        }}
+
+        .summary-item .label {{ color: var(--text-secondary); font-size: 0.9em; }}
+        .summary-item .value {{ font-size: 1.8em; font-weight: bold; }}
+        .summary-item .value.attacker {{ color: var(--accent-attacker); }}
+        .summary-item .value.defender {{ color: var(--accent-defender); }}
+
+        .template-section, .errors {{
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }}
+
+        .errors ul {{ margin-left: 20px; color: var(--accent-attacker); }}
+
+        .round {{
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            overflow: hidden;
+            border-left: 4px solid var(--accent-blocked);
+        }}
+
+        .round.success {{ border-left-color: var(--accent-success); }}
+
+        .round-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--bg-section);
+        }}
+
+        .round-number {{ font-weight: bold; font-size: 1.1em; }}
+
+        .round-status {{
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }}
+
+        .round-status.blocked {{ background: rgba(0, 255, 136, 0.2); color: var(--accent-blocked); }}
+        .round-status.success {{ background: rgba(233, 69, 96, 0.2); color: var(--accent-success); }}
+
+        .section {{ padding: 15px 20px; }}
+
+        .section-header {{
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }}
+
+        .content {{
+            background: var(--bg-dark);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.85em;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }}
+
+        .content.attacker {{ border-left: 3px solid var(--accent-attacker); }}
+        .content.defender {{ border-left: 3px solid var(--accent-defender); }}
+        .content.formatted-input {{ border-left: 3px solid var(--text-secondary); }}
+        .content.template {{ border-left: 3px solid #ffd700; }}
+
+        .extracted-value {{
+            padding: 10px 20px;
+            background: var(--bg-section);
+            font-size: 0.9em;
+        }}
+
+        .extracted-value code {{
+            background: var(--bg-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }}
+
+        code {{
+            background: var(--bg-section);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }}
+
+        @media (max-width: 600px) {{
+            body {{ padding: 10px; }}
+            .summary {{ gap: 20px; }}
+            .round-header {{ flex-direction: column; gap: 10px; }}
+        }}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏟️ Battle Report</h1>
+        <div class="scenario-name">{html.escape(arena_result.scenario_type)}</div>
+
+        <div class="summary">
+            <div class="summary-item">
+                <div class="label">Winner</div>
+                <div class="value {winner_class}">{winner_emoji} {arena_result.winner.upper()}</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">Rounds Defended</div>
+                <div class="value">{arena_result.rounds_defended} / {arena_result.total_rounds}</div>
+            </div>
+            <div class="summary-item">
+                <div class="label">Defense Rate</div>
+                <div class="value">{arena_result.get_defense_success_rate():.0%}</div>
+            </div>
+        </div>
+    </div>
+
+    {error_html}
+    {template_html}
+
+    <h2>⚔️ Battle Rounds</h2>
+    {''.join(rounds_html)}
+
+    <div style="text-align: center; color: var(--text-secondary); padding: 20px;">
+        Generated by AgentBeats Security Arena
+    </div>
+</body>
+</html>'''
 
     def _format_results(self, arena_result: ArenaResult, scenario) -> str:
         """Format arena results as human-readable text."""

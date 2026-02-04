@@ -18,6 +18,7 @@ from .resume_downgrade import ResumeDowngradePlugin
 from .gymjailbreak import GymJailbreakPlugin
 from .encodedpayload import EncodedPayloadPlugin
 from .legaleagleeye import LegalEagleEyePlugin
+from .flightapifake import FlightApiFakePlugin
 
 
 # Registry mapping scenario names to plugin classes
@@ -31,6 +32,7 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "gymjailbreak": GymJailbreakPlugin,
     "encodedpayload": EncodedPayloadPlugin,
     "legaleagleeye": LegalEagleEyePlugin,
+    "flightapifake": FlightApiFakePlugin,
 }
 
 

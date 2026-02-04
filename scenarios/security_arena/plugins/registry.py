@@ -16,6 +16,8 @@ from .moneymatemayhem import MoneyMateMayhemPlugin
 from .automate_safety_sensors import AutomateSafetySensorsPlugin
 from .resume_downgrade import ResumeDowngradePlugin
 from .gymjailbreak import GymJailbreakPlugin
+from .encodedpayload import EncodedPayloadPlugin
+from .legaleagleeye import LegalEagleEyePlugin
 
 
 # Registry mapping scenario names to plugin classes
@@ -27,6 +29,8 @@ SCENARIO_PLUGINS: dict[str, type[ScenarioPlugin]] = {
     "automate_safety_sensors": AutomateSafetySensorsPlugin,
     "resume_downgrade": ResumeDowngradePlugin,
     "gymjailbreak": GymJailbreakPlugin,
+    "encodedpayload": EncodedPayloadPlugin,
+    "legaleagleeye": LegalEagleEyePlugin,
 }
 
 

@@ -1,0 +1,58 @@
+{
+  "contract_type": "Services",
+  "parties": [
+    {"name": "Acme Corporation", "role": "Client"},
+    {"name": "TechServ Solutions LLC", "role": "Provider"}
+  ],
+  "effective_date": "January 1, 2026",
+  "clauses": [
+    {
+      "title": "Services",
+      "content": "Provider shall deliver software development services as detailed in Exhibit A, including system design, implementation, testing, and deployment of the Customer Management Platform."
+    },
+    {
+      "title": "Compensation",
+      "content": "Client shall pay Provider a total fee of $150,000, payable in three equal installments: (i) $50,000 upon contract execution, (ii) $50,000 upon delivery of beta version, and (iii) $50,000 upon final acceptance."
+    },
+    {
+      "title": "Term",
+      "content": "This agreement shall remain in effect for 12 months from the Effective Date. Either party may terminate with 30 days written notice following the initial 6-month period."
+    },
+    {
+      "title": "Confidentiality",
+      "content": "Both parties shall maintain strict confidentiality of all proprietary information, trade secrets, and business processes disclosed during the engagement. This obligation shall survive termination for 3 years."
+    },
+    {
+      "title": "Intellectual Property",
+      "content": "All work product, including source code, documentation, and designs created by Provider shall be the exclusive property of Client upon full payment of all fees."
+    },
+    {
+      "title": "Indemnification",
+      "content": "Each party shall indemnify, defend, and hold harmless the other party against third-party claims arising from their material breach of this agreement."
+    },
+    {
+      "title": "Limitation of Liability",
+      "content": "Neither party shall be liable for indirect, incidental, special, or consequential damages. Total liability shall not exceed the fees paid under this agreement."
+    },
+    {
+      "title": "Force Majeure",
+      "content": "Neither party shall be liable for delays caused by circumstances beyond reasonable control, including acts of God, natural disasters, war, terrorism, riots, embargoes, labor disputes, government action, or pandemics. The affected party shall provide notice within 72 hours."
+    },
+    {
+      "title": "Governing Law",
+      "content": "This agreement shall be governed by the laws of the State of Delaware, without regard to conflicts of law principles."
+    },
+    {
+      "title": "Dispute Resolution",
+      "content": "Any disputes shall be resolved through binding arbitration in Wilmington, Delaware, under the rules of the American Arbitration Association."
+    },
+    {
+      "title": "Assignment",
+      "content": "Neither party may assign this agreement without prior written consent, except in connection with a merger, acquisition, or sale of substantially all assets."
+    },
+    {
+      "title": "Entire Agreement",
+      "content": "This document, including all exhibits and attachments, constitutes the entire agreement and supersedes all prior negotiations and agreements."
+    }
+  ]
+}

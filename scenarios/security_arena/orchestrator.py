@@ -1,18 +1,7 @@
 #!/usr/bin/env python3
 """
-Security Arena Orchestrator
-
-This green agent orchestrates dynamic adversarial battles for ANY scenario.
-It loads scenario plugins and injects scenario-specific context to generic agents.
-
-Flow:
-1. Load scenario plugin based on config
-2. Test baseline (defender without attacks)
-3. Run multi-round battle:
-   - Send attack objective to attacker (with scenario context)
-   - Send attacker's output to defender (with role/task context)
-   - Check if attack succeeded using scenario's success checker
-4. Score and save results
+Security Arena Orchestrator - Runs adversarial battles between attacker and defender agents.
+Loads scenario plugins and injects context to generic agents.
 """
 
 import argparse
@@ -56,28 +45,19 @@ AGENT_TIMEOUT_SECONDS = int(os.getenv("AGENT_TIMEOUT_SECONDS", "120"))
 
 
 class AgentTimeoutError(Exception):
-    """Raised when an agent call times out"""
-    def __init__(self, agent_type: str, message: str = ""):
-        self.agent_type = agent_type  # "attacker" or "defender"
-        super().__init__(message or f"{agent_type} timed out")
+    def __init__(self, agent_type: str):
+        self.agent_type = agent_type
+        super().__init__(f"{agent_type} timed out")
 
 
 class AgentCrashError(Exception):
-    """Raised when an agent call fails (crash, network error, etc.)"""
     def __init__(self, agent_type: str, message: str = ""):
-        self.agent_type = agent_type  # "attacker" or "defender"
+        self.agent_type = agent_type
         super().__init__(message or f"{agent_type} crashed")
 
 
 class GenericArenaOrchestrator(GreenAgent):
-    """
-    Generic arena orchestrator that works with any scenario plugin.
-
-    Manages multi-round adversarial interactions by:
-    - Loading scenario-specific plugins
-    - Injecting scenario context into attacker/defender messages
-    - Using scenario-specific success detection
-    """
+    """Arena orchestrator that works with any scenario plugin."""
 
     def __init__(self):
         self._required_roles = ["attacker", "defender"]
@@ -85,28 +65,9 @@ class GenericArenaOrchestrator(GreenAgent):
         self._tool_provider = ToolProvider()
 
     async def _call_agent_with_timeout(
-        self,
-        message: str,
-        url: str,
-        agent_type: str,
-        new_conversation: bool = False
+        self, message: str, url: str, agent_type: str, new_conversation: bool = False
     ) -> str:
-        """
-        Call an agent with timeout protection.
-
-        Args:
-            message: The message to send
-            url: The agent's URL
-            agent_type: "attacker" or "defender" (for error attribution)
-            new_conversation: Whether to start a new conversation
-
-        Returns:
-            The agent's response
-
-        Raises:
-            AgentTimeoutError: If the agent doesn't respond in time
-            AgentCrashError: If the agent crashes or returns an error
-        """
+        """Call an agent with timeout protection. Raises AgentTimeoutError or AgentCrashError."""
         try:
             response = await asyncio.wait_for(
                 self._tool_provider.talk_to_agent(
@@ -125,37 +86,20 @@ class GenericArenaOrchestrator(GreenAgent):
             raise AgentCrashError(agent_type, str(e))
 
     def validate_request(self, request: EvalRequest) -> tuple[bool, str]:
-        """Validate that request has required participants and config"""
-        # Check if normal_user mode - requires defender + normal_user
+        """Validate that request has required participants and config."""
         is_normal_user = request.config.get("normal_user", False)
-        if is_normal_user:
-            required_roles = ["defender", "normal_user"]
-        else:
-            required_roles = self._required_roles
-
-        # Check required roles
+        required_roles = ["defender", "normal_user"] if is_normal_user else self._required_roles
         missing_roles = set(required_roles) - set(request.participants.keys())
         if missing_roles:
             return False, f"Missing required roles: {missing_roles}"
-
-        # Check required config keys
         missing_config = set(self._required_config_keys) - set(request.config.keys())
         if missing_config:
             return False, f"Missing required config keys: {missing_config}"
-
         return True, "ok"
 
     async def run_eval(self, req: EvalRequest, updater: TaskUpdater) -> None:
-        """
-        Main orchestration logic for the arena battle.
-
-        Flow:
-        1. Load scenario plugin
-        2. Phase 1: Test baseline (defender alone, no attacks)
-        3. Phase 2: Run multi-round adversarial battle
-        4. Determine winner and create result
-        """
-        logger.info(f"Starting Security Arena: {req}")
+        """Main orchestration: load scenario, run battle, save results."""
+        logger.info("Starting Security Arena: %s", req)
 
         try:
             # Parse config and load scenario plugin
@@ -169,7 +113,7 @@ class GenericArenaOrchestrator(GreenAgent):
 
             # Load the scenario plugin
             scenario = load_scenario(scenario_type, req.config)
-            logger.info(f"Loaded scenario plugin: {scenario.get_scenario_name()}")
+            logger.info("Loaded scenario plugin: %s", scenario.get_scenario_name())
 
             defender_url = str(req.participants["defender"])
 
@@ -273,29 +217,14 @@ class GenericArenaOrchestrator(GreenAgent):
             self._tool_provider.reset()
 
     async def _run_normal_user_mode(
-        self,
-        req: EvalRequest,
-        config: ArenaConfig,
-        scenario,
-        normal_user_url: str,
-        defender_url: str,
-        updater: TaskUpdater
+        self, req: EvalRequest, config: ArenaConfig, scenario,
+        normal_user_url: str, defender_url: str, updater: TaskUpdater
     ) -> None:
-        """
-        Run normal user helpfulness test using 3-step flow:
-
-        1. Normal user generates a question from topic + scenario context
-        2. Question is sent to defender (same as attacker flow)
-        3. Normal user evaluates defender's response
-
-        This tests that the defender remains helpful despite security hardening.
-        """
+        """Test defender helpfulness: generate question, get response, evaluate."""
         await updater.update_status(
             TaskState.working,
             new_agent_text_message("🧪 Normal User Test - Testing helpfulness...")
         )
-
-        # Get topics from config (use helper method that handles bool vs dict)
         topics_config = config.get_normal_user_topics()
         if not topics_config:
             await updater.update_status(
@@ -468,37 +397,13 @@ class GenericArenaOrchestrator(GreenAgent):
         return passed, eval_result[:100]
 
     async def _run_adversarial_battle(
-        self,
-        attacker_url: str,
-        defender_url: str,
-        scenario,
-        config: ArenaConfig,
-        updater: TaskUpdater
+        self, attacker_url: str, defender_url: str, scenario,
+        config: ArenaConfig, updater: TaskUpdater
     ) -> dict:
-        """
-        Run multi-round battle between attacker and defender.
-
-        Flow per round:
-        1. Send attack objective to attacker (with scenario context)
-        2. Attacker generates attack output
-        3. Send attack output to defender (with role/task context)
-        4. Defender generates response
-        5. Check if manipulation succeeded using scenario checker
-
-        Returns:
-            dict with keys:
-            - winner, manipulation_round, rounds_defended, battle_log
-            - attacker_timeout_errors, attacker_crash_errors
-            - defender_timeout_errors, defender_crash_errors
-        """
+        """Run multi-round battle. Returns dict with winner, errors, and battle_log."""
         battle_log = []
         first_manipulation_round = None
-
-        # Error tracking per agent
-        attacker_timeout_errors = 0
-        attacker_crash_errors = 0
-        defender_timeout_errors = 0
-        defender_crash_errors = 0
+        errors = {"attacker_timeout": 0, "attacker_crash": 0, "defender_timeout": 0, "defender_crash": 0}
 
         for round_num in range(config.num_rounds):
             await updater.update_status(
@@ -531,310 +436,167 @@ class GenericArenaOrchestrator(GreenAgent):
             # Send full context dict (as JSON) to attacker
             attacker_message = context.to_json(include_attack_info=True)
 
-            logger.info(f"Round {round_num + 1}: Sending to attacker")
+            logger.info("Round %d: Sending to attacker", round_num + 1)
             try:
                 attacker_output = await self._call_agent_with_timeout(
-                    attacker_message,
-                    attacker_url,
-                    agent_type="attacker",
-                    new_conversation=False  # Maintain state across rounds
+                    attacker_message, attacker_url, "attacker", new_conversation=False
                 )
             except AgentTimeoutError:
-                attacker_timeout_errors += 1
+                errors["attacker_timeout"] += 1
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"⏱️ Attacker TIMEOUT in round {round_num + 1}"
-                    )
+                    TaskState.working, new_agent_text_message(f"⏱️ Attacker TIMEOUT round {round_num + 1}")
                 )
-                # Skip this round - count as defender win for the round
                 continue
             except AgentCrashError as e:
-                attacker_crash_errors += 1
+                errors["attacker_crash"] += 1
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"💥 Attacker CRASHED in round {round_num + 1}: {e}"
-                    )
+                    TaskState.working, new_agent_text_message(f"💥 Attacker CRASHED round {round_num + 1}: {e}")
                 )
                 continue
-
             await updater.update_status(
-                TaskState.working,
-                new_agent_text_message(
-                    f"Attacker generated output ({len(attacker_output)} chars)"
-                )
+                TaskState.working, new_agent_text_message(f"Attacker output ({len(attacker_output)} chars)")
             )
 
-            # === DEFENDER TURN: Respond to attack ===
-            # Apply attacker output to input template (also sets context.formatted_input)
+            # === DEFENDER TURN ===
             context.apply_input_template(attacker_output)
-
-            # Send filtered context as JSON (includes formatted_input)
             defender_message = context.to_json(include_attack_info=False)
-
-            logger.info(f"Round {round_num + 1}: Sending to defender")
+            logger.info("Round %d: Sending to defender", round_num + 1)
             try:
                 defender_response = await self._call_agent_with_timeout(
-                    defender_message,
-                    defender_url,
-                    agent_type="defender",
-                    new_conversation=True  # Stateless: each attack independent
+                    defender_message, defender_url, "defender", new_conversation=True
                 )
             except AgentTimeoutError:
-                defender_timeout_errors += 1
+                errors["defender_timeout"] += 1
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"⏱️ Defender TIMEOUT in round {round_num + 1}"
-                    )
+                    TaskState.working, new_agent_text_message(f"⏱️ Defender TIMEOUT round {round_num + 1}")
                 )
-                # Skip this round - count as attacker win for the round
-                round_result = RoundResult(
-                    round=round_num + 1,
-                    attack_output=attacker_output,
-                    defender_output="[TIMEOUT]",
-                    manipulation_detected=True,  # Defender failure = attacker wins
-                    extracted_value="timeout"
-                )
-                battle_log.append(round_result)
+                battle_log.append(RoundResult(
+                    round=round_num + 1, attack_output=attacker_output,
+                    defender_output="[TIMEOUT]", manipulation_detected=True, extracted_value="timeout"
+                ))
                 first_manipulation_round = round_num + 1
                 break
             except AgentCrashError as e:
-                defender_crash_errors += 1
+                errors["defender_crash"] += 1
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"💥 Defender CRASHED in round {round_num + 1}: {e}"
-                    )
+                    TaskState.working, new_agent_text_message(f"💥 Defender CRASHED round {round_num + 1}: {e}")
                 )
-                # Defender crash = attacker wins
-                round_result = RoundResult(
-                    round=round_num + 1,
-                    attack_output=attacker_output,
-                    defender_output=f"[CRASH: {e}]",
-                    manipulation_detected=True,
-                    extracted_value="crash"
-                )
-                battle_log.append(round_result)
+                battle_log.append(RoundResult(
+                    round=round_num + 1, attack_output=attacker_output,
+                    defender_output=f"[CRASH: {e}]", manipulation_detected=True, extracted_value="crash"
+                ))
                 first_manipulation_round = round_num + 1
                 break
-
             await updater.update_status(
-                TaskState.working,
-                new_agent_text_message(f"Defender: {defender_response[:200]}...")
+                TaskState.working, new_agent_text_message(f"Defender: {defender_response[:200]}...")
             )
 
             # === CHECK FOR MANIPULATION ===
-            manipulation_detected, extracted_value = scenario.check_success(
-                defender_response=defender_response
-            )
-
-            # Log this round
-            round_result = RoundResult(
-                round=round_num + 1,
-                attack_output=attacker_output,
-                defender_output=defender_response,
-                manipulation_detected=manipulation_detected,
-                extracted_value=extracted_value
-            )
-            battle_log.append(round_result)
-
+            manipulation_detected, extracted_value = scenario.check_success(defender_response)
+            battle_log.append(RoundResult(
+                round=round_num + 1, attack_output=attacker_output, defender_output=defender_response,
+                manipulation_detected=manipulation_detected, extracted_value=extracted_value
+            ))
             if manipulation_detected:
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"🚨 MANIPULATION DETECTED in round {round_num + 1}! "
-                        f"Extracted value: {extracted_value}"
-                    )
+                    TaskState.working, new_agent_text_message(f"🚨 MANIPULATION round {round_num + 1}! Value: {extracted_value}")
                 )
-                # Early termination - attacker wins
                 first_manipulation_round = round_num + 1
                 break
             else:
                 await updater.update_status(
-                    TaskState.working,
-                    new_agent_text_message(
-                        f"✓ Round {round_num + 1}: Attack blocked "
-                        f"(value: {extracted_value})"
-                    )
+                    TaskState.working, new_agent_text_message(f"✓ Round {round_num + 1}: Blocked (value: {extracted_value})")
                 )
 
-        # Determine winner based on whether any manipulation occurred
+        # Build result
         result = {
-            "attacker_timeout_errors": attacker_timeout_errors,
-            "attacker_crash_errors": attacker_crash_errors,
-            "defender_timeout_errors": defender_timeout_errors,
-            "defender_crash_errors": defender_crash_errors,
+            "attacker_timeout_errors": errors["attacker_timeout"],
+            "attacker_crash_errors": errors["attacker_crash"],
+            "defender_timeout_errors": errors["defender_timeout"],
+            "defender_crash_errors": errors["defender_crash"],
             "battle_log": battle_log
         }
-
         if first_manipulation_round is not None:
             await updater.update_status(
-                TaskState.working,
-                new_agent_text_message(
-                    f"🚨 Attacker won! First success in round {first_manipulation_round}"
-                )
+                TaskState.working, new_agent_text_message(f"🚨 Attacker won in round {first_manipulation_round}")
             )
-            result.update({
-                "winner": "attacker",
-                "manipulation_round": first_manipulation_round,
-                "rounds_defended": first_manipulation_round - 1,
-            })
+            result.update({"winner": "attacker", "manipulation_round": first_manipulation_round, "rounds_defended": first_manipulation_round - 1})
         else:
             await updater.update_status(
-                TaskState.working,
-                new_agent_text_message(
-                    f"✅ Defender held for all {config.num_rounds} rounds!"
-                )
+                TaskState.working, new_agent_text_message(f"✅ Defender held for all {config.num_rounds} rounds!")
             )
-            result.update({
-                "winner": "defender",
-                "manipulation_round": None,
-                "rounds_defended": config.num_rounds,
-            })
+            result.update({"winner": "defender", "manipulation_round": None, "rounds_defended": config.num_rounds})
 
         return result
 
     async def _save_results(
-        self,
-        result: ArenaResult | NormalUserResult,
-        updater: TaskUpdater,
+        self, result: ArenaResult | NormalUserResult, updater: TaskUpdater,
         filename_suffix: str = "result"
     ) -> None:
-        """Save results to disk (works for both ArenaResult and NormalUserResult).
-
-        Saves to:
-        1. Central results directory: results/{team_name}/{scenario_type}/{timestamp}/
-        2. For ArenaResult: also saves evidence to submission's test_results folder
-        """
+        """Save results to disk (ArenaResult also saves evidence files)."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-        # Check for environment override
-        results_dir_env = os.getenv("AGENTBEATS_RESULTS_DIR")
-        if results_dir_env:
-            results_dir = Path(results_dir_env)
+        env_dir = os.getenv("AGENTBEATS_RESULTS_DIR")
+        if env_dir:
+            results_dir = Path(env_dir)
         elif result.team_name:
-            results_dir = (
-                Path("results") / result.team_name / result.scenario_type / timestamp
-            )
+            results_dir = Path("results") / result.team_name / result.scenario_type / timestamp
         else:
             results_dir = Path("results") / result.scenario_type
-
         results_dir.mkdir(parents=True, exist_ok=True)
-        result_filename = f"{filename_suffix}.json"
-        result_path = results_dir / result_filename
-
-        # Save full result
-        with open(result_path, 'w', encoding='utf-8') as f:
-            f.write(result.model_dump_json(indent=2))
-
+        result_path = results_dir / f"{filename_suffix}.json"
+        result_path.write_text(result.model_dump_json(indent=2), encoding='utf-8')
         logger.info("Results saved to: %s", result_path)
 
-        # ArenaResult-specific: generate evidence files
         if isinstance(result, ArenaResult):
-            attack_succeeded = result.winner == "attacker"
             attack_data = {
-                "succeeded": attack_succeeded,
+                "succeeded": result.winner == "attacker",
                 "manipulation_round": result.manipulation_round,
                 "rounds_defended": result.rounds_defended,
                 "total_rounds": result.total_rounds,
                 "team_name": result.team_name,
                 "scenario_type": result.scenario_type
             }
-
-            # Save to central results directory
-            attack_path = results_dir / "attack_succeeded.json"
-            with open(attack_path, 'w', encoding='utf-8') as f:
-                json.dump(attack_data, f, indent=2)
-
-            logger.info("Evidence files saved to: %s", results_dir)
-
-            # Also save evidence to submission's test_results folder
+            evidence = json.dumps(attack_data, indent=2)
+            (results_dir / "attack_succeeded.json").write_text(evidence, encoding='utf-8')
             if result.team_name:
-                submission_test_results = (
-                    Path("scenarios/security_arena/submissions")
-                    / result.team_name
-                    / result.scenario_type
-                    / "test_results"
-                )
-                parent_exists = submission_test_results.parent.exists()
-                if submission_test_results.exists() or parent_exists:
-                    submission_test_results.mkdir(parents=True, exist_ok=True)
-                    evidence_path = submission_test_results / "attack_succeeded.json"
-                    with open(evidence_path, 'w', encoding='utf-8') as f:
-                        json.dump(attack_data, f, indent=2)
-                    logger.info("Evidence also saved to: %s", submission_test_results)
+                sub = Path("scenarios/security_arena/submissions")
+                sub_dir = sub / result.team_name / result.scenario_type / "test_results"
+                if sub_dir.exists() or sub_dir.parent.exists():
+                    sub_dir.mkdir(parents=True, exist_ok=True)
+                    (sub_dir / "attack_succeeded.json").write_text(evidence, encoding='utf-8')
 
         await updater.update_status(
-            TaskState.working,
-            new_agent_text_message(f"Results saved to: {result_path}")
+            TaskState.working, new_agent_text_message(f"Results saved to: {result_path}")
         )
 
     def _format_results(self, arena_result: ArenaResult, scenario) -> str:
-        """Format arena results as human-readable text"""
+        """Format arena results as human-readable text."""
+        r = arena_result
         lines = [
-            "=" * 80,
-            f"GENERIC ARENA - {scenario.get_scenario_name().upper()} - RESULTS",
-            "=" * 80,
-            "",
-            f"Winner: {arena_result.winner.upper()}",
-            f"Total Rounds: {arena_result.total_rounds}",
-            ""
+            "=" * 80, f"ARENA - {scenario.get_scenario_name().upper()} - RESULTS",
+            "=" * 80, "", f"Winner: {r.winner.upper()}", f"Total Rounds: {r.total_rounds}", ""
         ]
-
-        if arena_result.winner == "attacker":
-            lines.extend([
-                f"🚨 Attacker succeeded in round {arena_result.manipulation_round}!",
-                f"Rounds defended before breach: {arena_result.rounds_defended}",
-                f"Attack Success Rate: {arena_result.get_attack_success_rate():.1%}",
-                ""
-            ])
+        if r.winner == "attacker":
+            lines += [f"🚨 Attacker succeeded round {r.manipulation_round}!",
+                      f"Defended: {r.rounds_defended}",
+                      f"Success Rate: {r.get_attack_success_rate():.1%}", ""]
         else:
-            lines.extend([
-                f"✅ Defender successfully resisted all {arena_result.total_rounds} rounds!",
-                f"Defense Success Rate: 100%",
-                ""
-            ])
-
-        # Error statistics
-        total_attacker_errors = (
-            arena_result.attacker_timeout_errors + arena_result.attacker_crash_errors
-        )
-        total_defender_errors = (
-            arena_result.defender_timeout_errors + arena_result.defender_crash_errors
-        )
-        if total_attacker_errors > 0 or total_defender_errors > 0:
-            lines.append("--- Error Summary ---")
-            if arena_result.attacker_timeout_errors > 0:
-                lines.append(
-                    f"⏱️ Attacker timeouts: {arena_result.attacker_timeout_errors}"
-                )
-            if arena_result.attacker_crash_errors > 0:
-                lines.append(
-                    f"💥 Attacker crashes: {arena_result.attacker_crash_errors}"
-                )
-            if arena_result.defender_timeout_errors > 0:
-                lines.append(
-                    f"⏱️ Defender timeouts: {arena_result.defender_timeout_errors}"
-                )
-            if arena_result.defender_crash_errors > 0:
-                lines.append(
-                    f"💥 Defender crashes: {arena_result.defender_crash_errors}"
-                )
+            lines += [f"✅ Defender resisted all {r.total_rounds} rounds!", "Defense: 100%", ""]
+        # Errors
+        errs = [(r.attacker_timeout_errors, "⏱️ Attacker timeouts"),
+                (r.attacker_crash_errors, "💥 Attacker crashes"),
+                (r.defender_timeout_errors, "⏱️ Defender timeouts"),
+                (r.defender_crash_errors, "💥 Defender crashes")]
+        if any(e[0] for e in errs):
+            lines.append("--- Errors ---")
+            lines += [f"{label}: {cnt}" for cnt, label in errs if cnt > 0]
             lines.append("")
-
-        lines.append("--- Round-by-Round Summary ---")
-        for round_result in arena_result.battle_log:
-            status = "🚨 BREACH" if round_result.manipulation_detected else "✓ Blocked"
-            lines.append(
-                f"Round {round_result.round}: {status} "
-                f"(value: {round_result.extracted_value})"
-            )
-
-        lines.append("")
-        lines.append("=" * 80)
-
+        # Rounds
+        lines.append("--- Rounds ---")
+        for rr in r.battle_log:
+            st = "🚨 BREACH" if rr.manipulation_detected else "✓ Blocked"
+            lines.append(f"Round {rr.round}: {st} (value: {rr.extracted_value})")
+        lines += ["", "=" * 80]
         return "\n".join(lines)
 
 
@@ -876,7 +638,7 @@ async def main():
 
     app = create_app(args.host, args.port)
 
-    logger.info(f"Starting Security Arena Orchestrator on http://{args.host}:{args.port}")
+    logger.info("Starting Security Arena Orchestrator on http://%s:%d", args.host, args.port)
 
     uvicorn_config = uvicorn.Config(app.build(), host=args.host, port=args.port)
     uvicorn_server = uvicorn.Server(uvicorn_config)

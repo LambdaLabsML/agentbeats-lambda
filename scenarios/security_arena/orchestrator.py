@@ -302,7 +302,7 @@ class GenericArenaOrchestrator(GreenAgent):
                     defender_response = await self._call_agent_with_timeout(
                         defender_message, defender_url, "defender", new_conversation=True
                     )
-                    attempt_result["defender_response"] = defender_response[:500]
+                    attempt_result["defender_response"] = defender_response
 
                     # === STEP 3: Normal user evaluates response ===
                     eval_context = {

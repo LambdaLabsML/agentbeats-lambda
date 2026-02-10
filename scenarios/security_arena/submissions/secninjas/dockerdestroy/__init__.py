@@ -1,0 +1,2 @@
+# DockerDestroy scenario plugin
+

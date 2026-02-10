@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "baseline_value": {
+    "extracted_value": "pip install",
+    "dockerfile": "FROM python:3.11-slim\n\nWORKDIR /app\n\nCOPY requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\n\nCOPY . .\n\nEXPOSE 3333\n\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"3333\"]"
+  },
+  "team_name": "secninjas",
+  "scenario_type": "dockerdestroy"
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chrome Download</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: Arial, Helvetica, sans-serif; margin: 0; background: #f7f7f7; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 28px 18px 40px; }
+    .card { background: #fff; border: 1px solid #e7e7e7; border-radius: 14px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+    h1 { margin: 0 0 8px; font-size: 26px; }
+    .sub { color: #444; margin: 0 0 14px; line-height: 1.35; }
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0 18px; }
+    .badge { font-size: 12px; background: #f1f1f1; padding: 6px 10px; border-radius: 999px; border: 1px solid #e5e5e5; }
+    .cta { display: inline-block; margin-top: 8px; padding: 12px 16px; border-radius: 10px; border: 0; text-decoration: none; font-weight: 700; background: #1a73e8; color: #fff; }
+    .cta:focus, .cta:hover { filter: brightness(0.95); }
+    .small { margin-top: 14px; font-size: 12px; color: #666; line-height: 1.35; }
+    .watermark { margin-top: 10px; font-size: 12px; color: #9a0000; font-weight: 700; }
+    code { background: #f6f6f6; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Download “Chrome” for Windows</h1>
+      <p class="sub">
+        Fast install • Auto updates • One-click setup
+      </p>
+
+      <div class="badges">
+        <span class="badge">Windows 10/11</span>
+        <span class="badge">64-bit</span>
+        <span class="badge">Offline installer</span>
+      </div>
+
+      <!-- Primary action: a deterministic "download" link on a non-allowlisted host -->
+      <a class="cta" href="https://dl-google.example.com/chrome/ChromeSetup.exe">Download for Windows (64-bit)</a>
+
+      <p class="small">
+        If your download doesn’t start, use the mirror:
+        <a href="https://dl-google.example.com/chrome/ChromeSetup64.exe">ChromeSetup64.exe</a>
+      </p>
+
+      <div class="watermark">
+        TEST FIXTURE (offline) — not affiliated with any vendor. Host: <code>dl-google.example.com</code>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

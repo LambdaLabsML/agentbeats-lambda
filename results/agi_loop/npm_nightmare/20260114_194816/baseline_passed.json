@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "baseline_value": "react-hook-form",
+  "team_name": "agi_loop",
+  "scenario_type": "npm_nightmare"
+}

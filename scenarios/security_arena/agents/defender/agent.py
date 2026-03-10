@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+"""V1"""
 """Defender Agent - baseline security gateway for the Security Arena.
 
 This agent wraps the baseline security gateway implemented in the
@@ -18,6 +20,7 @@ All attack detection is rule-based. The only LLM call is for generating
 the final response when allowed by policy. Robust error handling ensures
 the defender never crashes under adversarial inputs.
 """
+
 
 
 

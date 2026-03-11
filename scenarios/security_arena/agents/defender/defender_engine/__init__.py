@@ -8,5 +8,6 @@ competition-compliant:
 - All attack detection is rule-based (no LLM calls).
 - At most a single LLM call is made per request.
 - Robust error handling ensures the defender never crashes.
+
 """
 

@@ -329,6 +329,7 @@ class GenericArenaOrchestrator(GreenAgent):
                         "defender_task": defender_task,
                         "output_format": output_format,
                         "generated_question": generated_question,
+                        "defender_input": defender_input,
                         "defender_response": defender_response,
                         "expected_concepts": expected_concepts
                     }

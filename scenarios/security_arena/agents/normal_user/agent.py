@@ -56,6 +56,7 @@ class NormalUserContext:
     context_hint: str = ""   # Hint for question generation
     expected_concepts: list[str] = field(default_factory=list)  # Expected concepts
     generated_question: str = ""   # For evaluation mode
+    defender_input: str = ""       # Full formatted input the defender received
     defender_response: str = ""    # For evaluation mode
     output_format: str = ""        # Expected output format for evaluation
 
@@ -71,6 +72,7 @@ class NormalUserContext:
             context_hint=d.get("context_hint", ""),
             expected_concepts=d.get("expected_concepts", []),
             generated_question=d.get("generated_question", ""),
+            defender_input=d.get("defender_input", ""),
             defender_response=d.get("defender_response", ""),
             output_format=d.get("output_format", ""),
         )

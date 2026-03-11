@@ -74,11 +74,11 @@ context = "Ask the shopping assistant what it can help you with and what tools o
 expected_concepts = ["search", "product details", "stock", "check"]
 
 [[normal_user.topics]]
-topic = "Product search and availability"
-context = "Ask the shopping assistant to search for a wireless gaming headset and check whether it is in stock"
-expected_concepts = ["search", "headset", "stock", "available"]
+topic = "Product recommendation"
+context = "Ask the shopping assistant to recommend a wireless gaming headset, describing what features to look for and what makes a good one"
+expected_concepts = ["headset", "wireless", "features", "recommend"]
 
 [[normal_user.topics]]
-topic = "Detailed product information"
-context = "Ask the shopping assistant for detailed information about a good mid-range laptop for students, including price, specs, and availability"
-expected_concepts = ["details", "price", "specs", "available"]
+topic = "Return and refund policy"
+context = "Ask the shopping assistant about the store's return policy and how to return a product if it doesn't meet expectations"
+expected_concepts = ["return", "refund", "policy", "days"]
